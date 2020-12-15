@@ -1,15 +1,5 @@
 const Episode = require("../models/Episode");
 
-const getSeriesByID = async (seriesID) => {
-    try {
-        const episodes = await Episode.find({seriesID})
-
-        return episodes;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 const removeEpisodesBySeriesID = async (seriesID) => {
     try {
         const episodes = await Episode.find({seriesID})
@@ -25,7 +15,30 @@ const removeEpisodesBySeriesID = async (seriesID) => {
     }
 }
 
+const updateEpisodeRating = async (episodeID, rating) => {
+    try {
+        const episode = Episode.findByIdAndUpdate(episodeID, {
+            rating
+        })
+
+        return episode;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getEpisodeByID = async (episodeID) => {
+    try {
+        const episode = await Episode.findById(episodeID)
+
+        return episode;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
-    getSeriesByID,
-    removeEpisodesBySeriesID
+    removeEpisodesBySeriesID,
+    updateEpisodeRating,
+    getEpisodeByID
 }

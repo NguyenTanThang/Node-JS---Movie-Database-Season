@@ -7,6 +7,14 @@ const {
     updateSeriesRating
 } = require("../requests/seriesRequests");
 const {
+    getEpisodeByID,
+    updateEpisodeRating
+} = require("../requests/episodeRequests");
+const {
+    getSeasonByID,
+    updateSeasonRating
+} = require("../requests/seasonRequests");
+const {
     isObjectEmpty
 } = require("../utils/utils");
 const A_OR_AN = "a";
@@ -100,6 +108,30 @@ const getReviewByCustomerIDAndMovieID = async (req, res) => {
     }
 }
 
+const getReviewByCustomerID = async (req, res) => {
+    try {
+        const {
+            customerID
+        } = req.params;
+        const review = await Review.find({
+            customerID
+        });
+
+        res.json({
+            success: true,
+            data: review
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const getReviewsByMovieID = async (req, res) => {
     try {
         const {
@@ -151,6 +183,34 @@ const changeRatingOfSeries = async (seriesID) => {
     await updateSeriesRating(seriesID, meanRating);
 }
 
+const changeRatingOfEpisode = async (episodeID) => {
+    let meanRating = 0;
+    const allReviews = await Review.find({
+        movieID: episodeID
+    });
+
+    allReviews.forEach(reviewItem => {
+        meanRating += reviewItem.grading;
+    });
+    meanRating = meanRating / allReviews.length;
+
+    await updateEpisodeRating(episodeID, meanRating);
+}
+
+const changeRatingOfSeason = async (seasonID) => {
+    let meanRating = 0;
+    const allReviews = await Review.find({
+        movieID: seasonID
+    });
+
+    allReviews.forEach(reviewItem => {
+        meanRating += reviewItem.grading;
+    });
+    meanRating = meanRating / allReviews.length;
+
+    await updateSeasonRating(seasonID, meanRating);
+}
+
 const addReview = async (req, res) => {
     try {
         let {
@@ -165,11 +225,20 @@ const addReview = async (req, res) => {
         }).save();
 
         const existedMovie = await getMovieByID(movieID);
+        const existedSeason = await getSeasonByID(movieID);
+        const existedEpisode = await getEpisodeByID(movieID);
 
-        if (!existedMovie || isObjectEmpty(existedMovie)) {
-            await changeRatingOfSeries(movieID)
-        } else {
+        if (existedMovie) {
             await changeRatingOfMovie(movieID)
+        } 
+        else if (existedSeason) {
+            await changeRatingOfSeason(movieID)
+        }
+        else if (existedEpisode) {
+            await changeRatingOfEpisode(movieID)
+        }
+        else {
+            await changeRatingOfSeries(movieID)
         }
 
         res.json({
@@ -207,11 +276,20 @@ const editReview = async (req, res) => {
         });
 
         const existedMovie = await getMovieByID(movieID);
+        const existedSeason = await getSeasonByID(movieID);
+        const existedEpisode = await getEpisodeByID(movieID);
 
-        if (!existedMovie || isObjectEmpty(existedMovie)) {
-            await changeRatingOfSeries(movieID)
-        } else {
+        if (existedMovie) {
             await changeRatingOfMovie(movieID)
+        } 
+        else if (existedSeason) {
+            await changeRatingOfSeason(movieID)
+        }
+        else if (existedEpisode) {
+            await changeRatingOfEpisode(movieID)
+        }
+        else {
+            await changeRatingOfSeries(movieID)
         }
 
         res.json({
@@ -272,5 +350,6 @@ module.exports = {
     editReview,
     deleteReview,
     getReviewByCustomerIDAndMovieID,
-    removeAllReviews
+    removeAllReviews,
+    getReviewByCustomerID
 }

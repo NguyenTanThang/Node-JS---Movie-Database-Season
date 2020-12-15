@@ -8,7 +8,8 @@ const {
     editReview,
     deleteReview,
     getReviewByCustomerIDAndMovieID,
-    removeAllReviews
+    removeAllReviews,
+    getReviewByCustomerID
 } = require("../controllers/reviewControllers");
 
 router.get('/', getAllReviews);
@@ -20,6 +21,8 @@ router.get('/:id', getReviewByID);
 router.get('/movieID/:movieID', getReviewsByMovieID);
 
 router.get('/movieID/:movieID/customerID/:customerID', getReviewByCustomerIDAndMovieID);
+
+router.get('/customerID/:customerID', getReviewByCustomerID);
 
 router.post('/add', addReview);
 
