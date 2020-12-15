@@ -56,7 +56,7 @@ const getEpisodeBySeasonID = async (req, res) => {
         } = req.params;
         const episodes = await Episode.find({
             seasonID
-        });
+        }).sort({episodeNum: 1});
 
         res.json({
             success: true,

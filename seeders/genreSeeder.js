@@ -3,9 +3,7 @@ var {connectDBWithURI} = require("../config/db");
 const MONGODB_URI = `mongodb+srv://fatman:123456a@blog.yrv4b.mongodb.net/movie-database-season?retryWrites=true&w=majority`;
 const mongoose = require("mongoose");
 
-const genres = [{
-        name: "Absurdist"
-    },
+const genres = [
     {
         name: "Action"
     },
@@ -14,6 +12,9 @@ const genres = [{
     },
     {
         name: "Animation"
+    },
+    {
+        name: "Biography"
     },
     {
         name: "Comedy"
@@ -28,49 +29,25 @@ const genres = [{
         name: "Fantasy"
     },
     {
-        name: "Historical"
+        name: "Family"
     },
     {
-        name: "Historical Fiction"
+        name: "Historical"
     },
     {
         name: "Horror"
     },
     {
-        name: "Magical Realism"
-    },
-    {
-        name: "Paranoid Fiction"
-    },
-    {
-        name: "Philosophical"
-    },
-    {
-        name: "Political"
-    },
-    {
         name: "Romance"
-    },
-    {
-        name: "Saga"
-    },
-    {
-        name: "Satire"
     },
     {
         name: "Science Fiction"
     },
     {
-        name: "Social"
-    },
-    {
-        name: "Speculative"
-    },
-    {
         name: "Thriller"
     },
     {
-        name: "Urban"
+        name: "Mystery"
     },
     {
         name: "Western"
