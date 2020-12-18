@@ -7,6 +7,9 @@ const {
     editSeasonSchema
 } = require("../utils/validator");
 const {
+    removeAllEpisodeBySeasonID
+} = require("../requests/episodeRequests");
+const {
     exchangeURLToFileDirectory
 } = require("../utils/utils");
 
@@ -300,7 +303,7 @@ const deleteSeason = async (req, res) => {
         }
 
         const season = await Season.findByIdAndDelete(id);
-        //await removeEpisodesBySeriesID(id);
+        //await removeAllEpisodeBySeasonID(id);
 
         res.json({
             success: true,

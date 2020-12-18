@@ -4,6 +4,9 @@ const APP_NAME = "episode";
 const {
     exchangeURLToFileDirectory
 } = require("../utils/utils");
+const {
+    removeSubtitleByVideoURL
+} = require("../requests/subtitleRequests");
 
 const getAllEpisodes = async (req, res) => {
     try {
@@ -223,7 +226,9 @@ const deleteEpisode = async (req, res) => {
         const {
             id
         } = req.params;
+
         const episode = await Episode.findByIdAndDelete(id);
+        //await removeSubtitleByVideoURL(episode.episodeURL);
 
         res.json({
             success: true,

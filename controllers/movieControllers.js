@@ -13,6 +13,9 @@ const {
 const {
     getOMDBMovie
 } = require("../requests/omdbRequests");
+const {
+    removeSubtitleByVideoURL
+} = require("../requests/subtitleRequests");
 
 const reformAllMovies = async (req, res) => {
     try {
@@ -416,7 +419,7 @@ const deleteMovie = async (req, res) => {
         }
 
         const movie = await Movie.findByIdAndDelete(id);
-
+        //await removeSubtitleByVideoURL(movie.movieURL);
 
         res.json({
             success: true,

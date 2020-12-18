@@ -10,6 +10,9 @@ const {
     getOMDBMovie
 } = require("../requests/omdbRequests");
 const {
+    removeAllSeasonsBySeriesID
+} = require("../requests/seasonRequests");
+const {
     capitalizeFirstLetter,
     exchangeURLToFileDirectory
 } = require("../utils/utils");
@@ -358,7 +361,7 @@ const deleteSeries = async (req, res) => {
         }
 
         const series = await Series.findByIdAndDelete(id);
-        //await removeEpisodesBySeriesID(id);
+        //await removeAllSeasonsBySeriesID(id);
 
         res.json({
             success: true,
