@@ -38,11 +38,11 @@ const schema = new Schema({
     },
     last_modified_date: {
         type: Date,
-        default: Date.now()
+        default: new Date()
     },
     created_date: {
         type: Date,
-        default: Date.now()
+        default: new Date()
     }
 });
 
