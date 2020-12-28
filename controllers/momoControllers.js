@@ -4,31 +4,48 @@ const {CURRENT_URL, CURRENT_CLIENT_URL} = require("../config/config")
 const MomoPayment = require("../models/MomoPayment");
 const Plan = require("../models/Plan");
 const Subscription = require("../models/Subscription");
-const uuidv1 = uuid.v4;
+const uuidv1 = uuid.v1;
 const {
     dateToMili,
     miliToDate,
     convertDaysIntoMili
 } = require("../utils/utils");
+const crypto = require('crypto');
+
 //parameters send to MoMo get get payUrl
 var endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
 var hostname = "https://test-payment.momo.vn"
 var path = "/gw_payment/transactionProcessor"
+
 /*
 var partnerCode = "MOMOAVD320201026"
 var accessKey = "5dSfBkOKPBjFAwpj"
-var serectkey = "RlaUY2vtf66FzVoL7X6ugYqa1k3MqJJu"
+var secretKey = "RlaUY2vtf66FzVoL7X6ugYqa1k3MqJJu"
 */
+
+/*
 var partnerCode = "MOMO"
 var accessKey = "F8BBA842ECF85"
-var serectkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
-var orderInfo = "Pay with MOMO"
+var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
+*/
+
+var partnerCode = "MOMOBKUN20180529"
+var accessKey = "klm05TvNBzhg7h7j"
+var secretKey = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa"
+
 var returnUrl = `${CURRENT_URL}/momos/callback`
 var notifyurl = `${CURRENT_URL}/momos/callback`
+var orderInfo = "Pay with MoMo"
+
+/*
+var returnUrl = "https://momo.vn/return"
+var notifyurl = "https://callback.url/notify"
+*/
+
 var orderId = uuidv1()
 var requestId = uuidv1()
 var requestType = "captureMoMoWallet"
-var extraData = "merchantName=;merchantId=" //pass empty value if your merchant does not have stores else merchantName=[storeName]; merchantId=[storeId] to identify a transaction map with a physical store
+var extraData = "merchantName=Payment;merchantId=" //pass empty value if your merchant does not have stores else merchantName=[storeName]; merchantId=[storeId] to identify a transaction map with a physical store
 
 const callBackURL = async (req, res) => {
     console.log(req.query)
@@ -84,8 +101,7 @@ const getPayURL = async (request, response) => {
     console.log("--------------------RAW SIGNATURE----------------")
     console.log(rawSignature)
     //signature
-    const crypto = require('crypto');
-    var signature = crypto.createHmac('sha256', serectkey)
+    var signature = crypto.createHmac('sha256', secretKey)
         .update(rawSignature)
         .digest('hex');
     console.log("--------------------SIGNATURE----------------")
@@ -139,6 +155,7 @@ const getPayURL = async (request, response) => {
             bodyTestRes += bodyRes;
         });
         res.on('end', () => {
+            console.log(bodyTestRes);
             response.json({
                 payUrl: JSON.parse(bodyTestRes).payUrl
             })

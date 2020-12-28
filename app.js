@@ -26,6 +26,7 @@ var reviewsRouter = require('./routes/reviews');
 var plansRouter = require('./routes/plans');
 var subscriptionsRouter = require('./routes/subscriptions');
 var momosRouter = require('./routes/momos');
+var zalosRouter = require('./routes/zalos');
 var stripesRouter = require('./routes/stripes');
 
 var app = express();
@@ -53,6 +54,7 @@ app.use('/seasons', seasonsRouter);
 app.use('/episodes', episodesRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/momos', momosRouter);
+app.use('/zalos', zalosRouter);
 app.use('/stripes', stripesRouter);
 app.use('/plans', plansRouter);
 app.use('/subscriptions', subscriptionsRouter);
