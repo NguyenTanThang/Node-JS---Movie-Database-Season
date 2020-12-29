@@ -39,7 +39,7 @@ const getManagerByID = async (req, res) => {
         const {
             id
         } = req.params;
-        const manager = await Manager.findById(id);
+        const manager = await Manager.findById(id).populate('roleID').exec();
 
         if (!manager) {
             return res.json({

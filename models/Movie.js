@@ -32,8 +32,7 @@ const schema = new Schema({
     },
     IMDB_ID: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     imdbMovie: {
         type: Object

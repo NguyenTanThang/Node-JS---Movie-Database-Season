@@ -256,11 +256,14 @@ const addMovie = async (req, res) => {
         const existedMovie = await Movie.findOne({
             name
         });
+        /*
         const existedMovieIMDB = await Movie.findOne({
             IMDB_ID
         });
+        */
 
-        if (existedMovie || existedMovieIMDB) {
+        //if (existedMovie || existedMovieIMDB) {
+        if (existedMovie) {
             return res.json({
                 success: false,
                 message: `This ${APP_NAME} is already existed`,
@@ -353,6 +356,7 @@ const editMovie = async (req, res) => {
             })
         }
 
+        /*
         let duplicatedMovieIMDB = await Movie.findOne({
             IMDB_ID
         });
@@ -364,6 +368,7 @@ const editMovie = async (req, res) => {
                 status: 400
             })
         }
+        */
 
         const last_modified_date = Date.now();
         const imdbMovie = await getOMDBMovie(IMDB_ID);
