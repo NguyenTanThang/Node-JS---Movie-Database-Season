@@ -146,7 +146,7 @@ const managerLogin = async (req, res) => {
 
         const existedManager = await Manager.findOne({
             username
-        });
+        }).populate('roleID').exec();
 
         if (!existedManager || !compare(password, existedManager.password)) {
             return res.json({
