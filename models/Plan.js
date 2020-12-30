@@ -4,18 +4,15 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     price: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     priceVND: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     description: {
         type: String,

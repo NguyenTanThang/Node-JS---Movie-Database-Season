@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     genres: {
         type: [String],
@@ -17,13 +16,11 @@ const schema = new Schema({
     },
     trailerURL: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     posterURL: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     IMDB_ID: {
         type: String,

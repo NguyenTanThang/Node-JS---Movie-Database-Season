@@ -21,13 +21,11 @@ const schema = new Schema({
     },
     posterURL: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     trailerURL: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     rating: {
         type: Number,

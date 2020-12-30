@@ -270,7 +270,7 @@ const deleteSubtitleByMovieID = async (req, res) => {
 
         res.json({
             success: true,
-            data: subtitle,
+            data: subtitles,
             message: `Successfully deleted ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
