@@ -481,12 +481,13 @@ const sendValidationEmail = (req, customer) => {
 
 const sendResetPasswordEmail = async (customer) => {
   const {
-    _id
+    _id,
+    email
   } = customer;
   let token = generateChangePasswordToken();
 
   const changePasswordToken = await new ChangePasswordToken({
-    _id,
+    customerID: _id,
     token,
     expiryDate: Date.now() + 360000
   }).save();
@@ -515,7 +516,7 @@ const sendResetPasswordEmail = async (customer) => {
   let mailOptions = {
     from: 'letsflix360@gmail.com', // TODO: email sender
     to: email, // TODO: email receiver
-    subject: "Let's Flix Account Validation",
+    subject: "Let's Flix Password Reset",
     html: `
       <!doctype html>
       <html>
@@ -877,7 +878,9 @@ const sendResetPasswordEmail = async (customer) => {
                                       <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                         <tbody>
                                           <tr>
-                                            <td> <a href="https://react-js-movie-database-season-client.netlify.app/change-password/${changePasswordToken}" target="_blank">validate Email</a> </td>
+                                            <td> <a href="${CURRENT_CLIENT_URL}/change-password/${changePasswordToken}" target="_blank">
+                                              Reset Password
+                                            </a> </td>
                                           </tr>
                                         </tbody>
                                       </table>
@@ -1104,6 +1107,7 @@ const resetPasswordTokenRequest = async (req, res) => {
     }
 
     await sendResetPasswordEmail(customer);
+
     return res.json({
       success: true,
       data: null,

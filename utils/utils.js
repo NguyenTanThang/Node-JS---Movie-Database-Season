@@ -53,5 +53,6 @@ module.exports = {
     dateToMili,
     miliToDate,
     capitalizeFirstLetter,
-    exchangeURLToFileDirectory
+    exchangeURLToFileDirectory,
+    generateChangePasswordToken
 }
