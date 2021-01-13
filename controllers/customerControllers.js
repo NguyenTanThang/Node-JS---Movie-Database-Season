@@ -878,7 +878,7 @@ const sendResetPasswordEmail = async (customer) => {
                                       <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                         <tbody>
                                           <tr>
-                                            <td> <a href="${CURRENT_CLIENT_URL}/change-password/${changePasswordToken}" target="_blank">
+                                            <td> <a href="${CURRENT_CLIENT_URL}/change-password/${token}" target="_blank">
                                               Reset Password
                                             </a> </td>
                                           </tr>
