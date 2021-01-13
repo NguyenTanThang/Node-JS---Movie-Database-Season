@@ -1094,8 +1094,22 @@ const resetPasswordTokenRequest = async (req, res) => {
     } = req.body;
     const customer = await Customer.findOne({email});
 
-    await sendResetPasswordEmail(customer);
+    if (!customer) {
+      return res.json({
+        success: false,
+        data: null,
+        message: `This email does not exist`,
+        status: 400
+      })
+    }
 
+    await sendResetPasswordEmail(customer);
+    return res.json({
+      success: true,
+      data: null,
+      message: `Reset password email has been sent`,
+      status: 200
+    })
   } catch (error) {
     console.log(error);
     res.json({
