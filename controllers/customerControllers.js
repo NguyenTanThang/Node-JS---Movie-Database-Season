@@ -1146,7 +1146,9 @@ const changePassword = async (req, res) => {
       })
     }
 
-    customer = await Customer.findByIdAndUpdate(customerID, {password: newPassword});
+    let password = encrypt(newPassword);
+
+    customer = await Customer.findByIdAndUpdate(customerID, {password});
 
     res.json({
       success: true,
@@ -1177,8 +1179,10 @@ const resetPassword = async (req, res) => {
 
     const resetPasswordToken = await ChangePasswordToken.findOne({token});
     
+    let password = encrypt(newPassword);
+
     const {customerID} = resetPasswordToken;
-    const customer = await Customer.findByIdAndUpdate(customerID, {password: newPassword});
+    const customer = await Customer.findByIdAndUpdate(customerID, {password});
 
     res.json({
       success: true,
