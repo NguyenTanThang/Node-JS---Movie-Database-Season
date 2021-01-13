@@ -390,7 +390,7 @@ const sendValidationEmail = (req, customer) => {
             </style>
           </head>
           <body class="">
-            <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+            <span class="preheader">Welcome ${email}, we are glad to see new people joining in.</span>
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
               <tr>
                 <td>&nbsp;</td>
@@ -407,7 +407,7 @@ const sendValidationEmail = (req, customer) => {
                             <tr>
                               <td>
                                 <p>Hi there,</p>
-                                <p>Sometimes you just want to send a simple HTML email with a simple design and clear call to action. This is it.</p>
+                                <p>You just have one more thing to do which is validate the email. Please click the button below to validate it</p>
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                   <tbody>
                                     <tr>
@@ -415,7 +415,7 @@ const sendValidationEmail = (req, customer) => {
                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                           <tbody>
                                             <tr>
-                                              <td> <a href="${validationLink}" target="_blank">Call To Action</a> </td>
+                                              <td> <a href="${validationLink}" target="_blank">validate Email</a> </td>
                                             </tr>
                                           </tbody>
                                         </table>
@@ -423,8 +423,8 @@ const sendValidationEmail = (req, customer) => {
                                     </tr>
                                   </tbody>
                                 </table>
-                                <p>This is a really simple email template. Its sole purpose is to get the recipient to click the button with no distractions.</p>
-                                <p>Good luck! Hope it works.</p>
+                                <p>Once your email have been validated, you can login right away.</p>
+                                <p>Thank you! Hope you have a good time using our application.</p>
                               </td>
                             </tr>
                           </table>
