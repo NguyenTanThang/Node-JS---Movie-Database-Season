@@ -8,7 +8,10 @@ const {
     deleteCustomer,
     validateCustomer,
     customerLogin,
-    customerSignup
+    customerSignup,
+    changePassword,
+    resetPassword,
+    resetPasswordTokenRequest
 } = require("../controllers/customerControllers");
 
 router.get('/', getAllCustomers);
@@ -19,11 +22,17 @@ router.get('/validate/:customerID', validateCustomer);
 
 router.post('/add', addCustomer);
 
+router.post('/reset-password-token', resetPasswordTokenRequest);
+
 router.post('/login', customerLogin);
 
 router.post('/signup', customerSignup);
 
 router.put('/edit/:id', editCustomer);
+
+router.put('/change-password/:customerID', changePassword);
+
+router.put('/reset-password/:token', resetPassword);
 
 router.delete('/delete/:id', deleteCustomer);
 

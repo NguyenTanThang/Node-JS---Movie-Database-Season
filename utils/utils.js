@@ -4,6 +4,7 @@ const {
 const {
     MILI_IN_DAY
 } = require("../constants/variables");
+const crypto = require("crypto");
 
 const isObjectEmpty = obj => {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
@@ -25,6 +26,10 @@ const miliToDate = mili => {
 
 const generateCustomerValidationLink = (customerID) => {
     return `${CURRENT_URL}/customers/validate/${customerID}`;
+}
+
+const generateChangePasswordToken = () => {
+    return crypto.randomBytes(20).toString('hex');
 }
 
 function capitalizeFirstLetter(string) {
