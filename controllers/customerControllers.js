@@ -22,9 +22,13 @@ const {
   deleteStripeCustomer
 } = require("../requests/customerStripeRequests");
 const {
+  createSession
+} = require("../requests/sessionRequests");
+const {
   CURRENT_CLIENT_URL
 } = require("../config/config");
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const sendValidationEmail = (req, customer) => {
   const {
@@ -979,10 +983,13 @@ const customerLogin = async (req, res) => {
     }
 
     let stripeCustomer = await getStripeCustomerByID(existedCustomer.stripeCustomerID)
-
+    const token = jwt.sign({ customerID: existedCustomer._id }, process.env.JWT_SECRET);
+    const session = await createSession(token, existedCustomer._id);
     const returnedCustomerItem = {
       customerItem: existedCustomer,
-      stripeCustomer
+      stripeCustomer,
+      token,
+      session
     }
 
     res.json({

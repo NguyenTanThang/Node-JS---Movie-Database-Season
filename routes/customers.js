@@ -13,8 +13,11 @@ const {
     resetPassword,
     resetPasswordTokenRequest
 } = require("../controllers/customerControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
-router.get('/', getAllCustomers);
+router.get('/', authenticateToken, getAllCustomers);
 
 router.get('/:id', getCustomerByID);
 

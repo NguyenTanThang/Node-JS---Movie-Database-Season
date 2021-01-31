@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var genresRouter = require('./routes/genres');
 var subtitlesRouter = require('./routes/subtitles');
 var customersRouter = require('./routes/customers');
+var sessionsRouter = require('./routes/sessions');
 var managerRolesRouter = require('./routes/managerRoles');
 var watchLatersRouter = require('./routes/watchLaters');
 var watchHistoryRouter = require('./routes/watchHistory');
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/sessions', sessionsRouter);
 app.use('/genres', genresRouter);
 app.use('/subtitles', subtitlesRouter);
 app.use('/movies', moviesRouter);
