@@ -14,6 +14,16 @@ const createSession = async (token, customerID) => {
     }
 }
 
+const getAllSessionsByCustomerID = async (customerID) => {
+    try {
+        const sessions = await Session.find({customerID});
+        
+        return sessions;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const removeAllExpiredSession = async () => {
     try {
         let sessions = await Session.find();
@@ -35,5 +45,6 @@ const removeAllExpiredSession = async () => {
 
 module.exports = {
     createSession,
-    removeAllExpiredSession
+    removeAllExpiredSession,
+    getAllSessionsByCustomerID
 }

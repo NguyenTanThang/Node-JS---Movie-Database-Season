@@ -109,11 +109,11 @@ const deleteSession = async (req, res) => {
             })
         }
 
-        session = await Session.findByIdAndDelete(sessionID);
+        const deletedSession = await Session.findByIdAndDelete(sessionID);
 
-        res.json({
+        return res.json({
             success: true,
-            data: session,
+            data: deletedSession,
             status: 200
         })
     } catch (error) {

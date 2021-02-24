@@ -22,7 +22,8 @@ const {
   deleteStripeCustomer
 } = require("../requests/customerStripeRequests");
 const {
-  createSession
+  createSession,
+  getAllSessionsByCustomerID
 } = require("../requests/sessionRequests");
 const {
   CURRENT_CLIENT_URL
@@ -982,9 +983,25 @@ const customerLogin = async (req, res) => {
       })
     }
 
-    let stripeCustomer = await getStripeCustomerByID(existedCustomer.stripeCustomerID)
-    const token = jwt.sign({ customerID: existedCustomer._id }, process.env.JWT_SECRET);
+    let stripeCustomer = await getStripeCustomerByID(existedCustomer.stripeCustomerID);
+    
+    const token = jwt.sign({
+      customerID: existedCustomer._id
+    }, process.env.JWT_SECRET);
+
+    const sessions = await getAllSessionsByCustomerID(existedCustomer._id);
+
+    if (sessions.length >= 1) {
+      return res.json({
+        success: false,
+        data: null,
+        message: `This account has reached the maximum number of concurrent users`,
+        status: 200
+      })
+    }
+
     const session = await createSession(token, existedCustomer._id);
+
     const returnedCustomerItem = {
       customerItem: existedCustomer,
       stripeCustomer,
@@ -998,6 +1015,7 @@ const customerLogin = async (req, res) => {
       message: `Successfully logged in`,
       status: 200
     })
+
   } catch (error) {
     console.log(error);
     res.json({
@@ -1102,7 +1120,9 @@ const resetPasswordTokenRequest = async (req, res) => {
     let {
       email
     } = req.body;
-    const customer = await Customer.findOne({email});
+    const customer = await Customer.findOne({
+      email
+    });
 
     if (!customer) {
       return res.json({
@@ -1141,7 +1161,7 @@ const changePassword = async (req, res) => {
       newPassword,
       oldPassword
     } = req.body;
-    
+
     let customer = await Customer.findById(customerID);
 
     if (!compare(oldPassword, customer.password)) {
@@ -1155,7 +1175,9 @@ const changePassword = async (req, res) => {
 
     let password = encrypt(newPassword);
 
-    customer = await Customer.findByIdAndUpdate(customerID, {password});
+    customer = await Customer.findByIdAndUpdate(customerID, {
+      password
+    });
 
     res.json({
       success: true,
@@ -1184,12 +1206,18 @@ const resetPassword = async (req, res) => {
       newPassword
     } = req.body;
 
-    const resetPasswordToken = await ChangePasswordToken.findOne({token});
-    
+    const resetPasswordToken = await ChangePasswordToken.findOne({
+      token
+    });
+
     let password = encrypt(newPassword);
 
-    const {customerID} = resetPasswordToken;
-    const customer = await Customer.findByIdAndUpdate(customerID, {password});
+    const {
+      customerID
+    } = resetPasswordToken;
+    const customer = await Customer.findByIdAndUpdate(customerID, {
+      password
+    });
 
     res.json({
       success: true,

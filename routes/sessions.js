@@ -13,6 +13,6 @@ router.get('/:sessionID', getSessionByID);
 
 router.put('/refresh/:sessionID', refreshSession);
 
-router.delete('/delete/:sessionID', refreshSession);
+router.delete('/delete/:sessionID', deleteSession);
 
 module.exports = router;
