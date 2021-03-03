@@ -17,7 +17,7 @@ const {
     authenticateToken
 } = require("../utils/jwtAuth");
 
-router.get('/', authenticateToken, getAllCustomers);
+router.get('/', getAllCustomers);
 
 router.get('/:id', getCustomerByID);
 
