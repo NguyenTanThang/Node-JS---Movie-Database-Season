@@ -54,8 +54,8 @@ const getCommentByCustomerID = async (req, res) => {
 
 const getCommentByMovieID = async (req, res) => {
     try {
-        const {movieSeriesID} = req.params;
-        const comments = await Comment.find({movieSeriesID})
+        const {movieID} = req.params;
+        const comments = await Comment.find({movieSeriesID: movieID})
         .sort({'created_date': -1})
         .populate('customerID')
         .exec();
