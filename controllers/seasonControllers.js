@@ -130,7 +130,10 @@ const getSeasonsBySeriesID = async (req, res) => {
         const {
             seriesID
         } = req.params;
-        const seasons = await Season.find({seriesID});
+        let seasons = await Season.find({seriesID});
+        seasons = seasons.sort(function(seasonA, seasonB) {
+            return seasonA.seasonNum - seasonB.seasonNum;
+        });
 
         res.json({
             success: true,

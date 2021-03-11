@@ -25,6 +25,7 @@ var seasonsRouter = require('./routes/seasons');
 var episodesRouter = require('./routes/episodes');
 var reviewsRouter = require('./routes/reviews');
 var plansRouter = require('./routes/plans');
+var commentsRouter = require('./routes/comments');
 var subscriptionsRouter = require('./routes/subscriptions');
 var momosRouter = require('./routes/momos');
 var zalosRouter = require('./routes/zalos');
@@ -59,6 +60,7 @@ app.use('/momos', momosRouter);
 app.use('/zalos', zalosRouter);
 app.use('/stripes', stripesRouter);
 app.use('/plans', plansRouter);
+app.use('/comments', commentsRouter);
 app.use('/subscriptions', subscriptionsRouter);
 
 // catch 404 and forward to error handler

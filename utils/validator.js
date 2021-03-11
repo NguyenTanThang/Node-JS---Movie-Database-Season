@@ -27,6 +27,15 @@ const addPlanSchema = Joi.object({
         .required(),
 })
 
+const addCommentSchema = Joi.object({
+    customerID: Joi.string()
+        .required(),
+    movieSeriesID: Joi.string()
+        .required(),
+    content: Joi.string()
+        .required(),
+})
+
 const addSubscriptionSchema = Joi.object({
     customerID: Joi.string()
         .required(),
@@ -240,5 +249,6 @@ module.exports = {
     loginManagerSchema,
     changePasswordManager,
     addSeasonSchema,
-    editSeasonSchema
+    editSeasonSchema,
+    addCommentSchema
 }
