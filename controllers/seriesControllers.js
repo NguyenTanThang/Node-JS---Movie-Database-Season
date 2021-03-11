@@ -175,9 +175,14 @@ const getSeriesByID = async (req, res) => {
             })
         }
 
+        const {IMDB_ID} = series;
+        const imdbSeries = await getOMDBMovie(IMDB_ID);
+        let updatedSeries = await Series.findByIdAndUpdate(id, {imdbSeries})
+        updatedSeries = await Series.findById(id);
+
         res.json({
             success: true,
-            data: series,
+            data: updatedSeries,
             status: 200
         })
     } catch (error) {

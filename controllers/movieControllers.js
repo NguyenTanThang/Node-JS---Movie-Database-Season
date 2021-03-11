@@ -195,6 +195,11 @@ const getMovieByID = async (req, res) => {
             })
         }
 
+        const {IMDB_ID} = movie;
+        const imdbMovie = await getOMDBMovie(IMDB_ID);
+        let updatedMovie = await Movie.findByIdAndUpdate(id, {imdbMovie})
+        updatedMovie = await Movie.findById(id);
+
         /*
         const movieActualURL = exchangeURLToFileDirectory(movie.movieURL);
         const trailerActualURL = exchangeURLToFileDirectory(movie.trailerURL);
@@ -211,7 +216,7 @@ const getMovieByID = async (req, res) => {
 
         res.json({
             success: true,
-            data: movie,
+            data: updatedMovie,
             status: 200
         })
     } catch (error) {
