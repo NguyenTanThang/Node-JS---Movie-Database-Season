@@ -163,7 +163,7 @@ const editComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     try {
         const {commentID} = req.params;
-        let existedComment = await Comment.findById(id);
+        let existedComment = await Comment.findById(commentID);
 
         if (!existedComment) {
             return res.json({
@@ -173,7 +173,7 @@ const deleteComment = async (req, res) => {
             })
         }
 
-        const comment = await Comment.findByIdAndDelete(id);
+        const comment = await Comment.findByIdAndDelete(commentID);
 
         res.json({
             success: true,

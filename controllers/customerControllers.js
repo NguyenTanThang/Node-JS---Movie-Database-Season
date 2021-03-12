@@ -5,7 +5,8 @@ const APP_NAME = "customer";
 const {
   addCustomerSchema,
   editCustomerSchema,
-  getMessage
+  getMessage,
+  loginSchema
 } = require("../utils/validator");
 const {
   generateCustomerValidationLink,
@@ -950,7 +951,7 @@ const customerLogin = async (req, res) => {
       password
     } = req.body;
 
-    const validation = addCustomerSchema.validate({
+    const validation = loginSchema.validate({
       email,
       password
     });
@@ -1030,11 +1031,13 @@ const customerLogin = async (req, res) => {
 const customerSignup = async (req, res) => {
   try {
     let {
+      username,
       email,
       password
     } = req.body;
 
     const validation = addCustomerSchema.validate({
+      username,
       email,
       password
     });
@@ -1065,6 +1068,7 @@ const customerSignup = async (req, res) => {
 
     password = encrypt(password);
     let customer = await new Customer({
+      username,
       email,
       password,
       stripeCustomerID: stripeCustomer.id
@@ -1376,12 +1380,15 @@ const editCustomer = async (req, res) => {
       id
     } = req.params;
     let {
+      username,
+      avatar,
       email,
       password,
       validated
     } = req.body;
 
     const validation = editCustomerSchema.validate({
+      username,
       email,
       password
     });
@@ -1422,6 +1429,8 @@ const editCustomer = async (req, res) => {
     if (password) {
       password = encrypt(password);
       customer = await Customer.findByIdAndUpdate(id, {
+        username,
+        avatar,
         email,
         validated,
         password,
@@ -1429,6 +1438,8 @@ const editCustomer = async (req, res) => {
       });
     } else {
       customer = await Customer.findByIdAndUpdate(id, {
+        username,
+        avatar,
         email,
         validated,
         last_modified_date
@@ -1438,6 +1449,8 @@ const editCustomer = async (req, res) => {
     const stripeCustomer = await updateStripeCustomer(customer.stripeCustomerID, {
       email
     })
+
+    customer = await Customer.findById(id);
 
     const returnedCustomerItem = {
       customerItem: customer,

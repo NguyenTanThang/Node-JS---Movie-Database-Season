@@ -21,7 +21,6 @@ const addPlanSchema = Joi.object({
         .required(),
     description: Joi.string()
         .min(3)
-        .max(30)
         .required(),
     durationInDays: Joi.number()
         .required(),
@@ -104,7 +103,24 @@ const changePasswordManager = Joi.object({
 const addCustomerSchema = Joi.object({
     email: Joi.string()
         .min(3)
+        .email({
+            tlds: {
+                allow: false
+            }
+        })
+        .required(),
+    username: Joi.string()
+        .min(3)
         .max(30)
+        .required(),
+    password: Joi.string()
+        .min(3)
+        .required(),
+})
+
+const loginSchema = Joi.object({
+    email: Joi.string()
+        .min(3)
         .email({
             tlds: {
                 allow: false
@@ -119,7 +135,6 @@ const addCustomerSchema = Joi.object({
 const editCustomerSchema = Joi.object({
     email: Joi.string()
         .min(3)
-        .max(30)
         .email({
             tlds: {
                 allow: false
@@ -127,6 +142,11 @@ const editCustomerSchema = Joi.object({
         })
         .required(),
     password: Joi.string()
+        .min(3)
+        .allow('')
+        .optional(),
+    username: Joi.string()
+        .max(30)
         .min(3)
         .allow('')
         .optional(),
@@ -250,5 +270,6 @@ module.exports = {
     changePasswordManager,
     addSeasonSchema,
     editSeasonSchema,
-    addCommentSchema
+    addCommentSchema,
+    loginSchema
 }

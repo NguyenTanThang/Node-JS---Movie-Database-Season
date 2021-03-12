@@ -7,6 +7,14 @@ const schema = new Schema({
         required: true,
         unique: true
     },
+    username: {
+        type: String,
+        default: "Username"
+    },
+    avatar: {
+        type: String,
+        default: "https://i.imgur.com/iG9kAgD.png"
+    },
     email: {
         type: String,
         required: true,
