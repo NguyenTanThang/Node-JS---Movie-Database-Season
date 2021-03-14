@@ -2,6 +2,7 @@ const Session = require("../models/Session");
 
 const createSession = async (token, customerID) => {
     try {
+        await removeAllExpiredSession();
         const session = await new Session({
             token, customerID,
             expiry_date: new Date(Date.now() + 300000),
