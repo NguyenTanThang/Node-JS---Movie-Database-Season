@@ -1162,14 +1162,15 @@ const changePassword = async (req, res) => {
       customerID,
     } = req.params;
     let {
+      email,
       newPassword,
       oldPassword
     } = req.body;
 
-    let customer = await Customer.findById(customerID);
+    let customer = await Customer.findOne({_id: customerID, email});
 
     if (!compare(oldPassword, customer.password)) {
-      res.json({
+      return res.json({
         success: false,
         data: null,
         message: `You have enterred the incorrect current password`,
@@ -1183,7 +1184,7 @@ const changePassword = async (req, res) => {
       password
     });
 
-    res.json({
+    return res.json({
       success: true,
       data: customer,
       message: `Successfully changed the password`,
