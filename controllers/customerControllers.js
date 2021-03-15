@@ -10,7 +10,8 @@ const {
 } = require("../utils/validator");
 const {
   generateCustomerValidationLink,
-  generateChangePasswordToken
+  generateChangePasswordToken,
+  getDaysDiff
 } = require("../utils/utils");
 const {
   encrypt,
@@ -495,7 +496,7 @@ const sendResetPasswordEmail = async (customer) => {
   const changePasswordToken = await new ChangePasswordToken({
     customerID: _id,
     token,
-    expiryDate: Date.now() + 360000
+    expiryDate: Date.now() + (1000 * 60 * 60 * 24)
   }).save();
 
   // Step 1
@@ -1218,8 +1219,19 @@ const resetPassword = async (req, res) => {
     let password = encrypt(newPassword);
 
     const {
-      customerID
+      customerID,
+      expiryDate
     } = resetPasswordToken;
+
+    if (getDaysDiff(expiryDate) <= 0) {
+      return res.json({
+        success: false,
+        data: null,
+        message: `Token has expired`,
+        status: 400
+      })
+    }
+
     const customer = await Customer.findByIdAndUpdate(customerID, {
       password
     });
@@ -1228,6 +1240,48 @@ const resetPassword = async (req, res) => {
       success: true,
       data: customer,
       message: `Successfully resetted the password`,
+      status: 200
+    })
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      data: null,
+      message: `Internal Server Error`,
+      status: 500
+    })
+  }
+}
+
+const getResetPasswordToken = async (req, res) => {
+  try {
+    let {
+      token,
+    } = req.params;
+
+    const resetPasswordToken = await ChangePasswordToken.findOne({
+      token
+    });
+
+    const {
+      customerID,
+      expiryDate
+    } = resetPasswordToken;
+
+    if (getDaysDiff(expiryDate) <= 0) {
+      return res.json({
+        success: false,
+        data: null,
+        message: `Token has expired`,
+        status: 400
+      })
+    }
+
+    const customer = await Customer.findById(customerID);
+
+    res.json({
+      success: true,
+      data: customer,
       status: 200
     })
   } catch (error) {
@@ -1526,5 +1580,6 @@ module.exports = {
   customerLogin,
   resetPasswordTokenRequest,
   changePassword,
-  resetPassword
+  resetPassword,
+  getResetPasswordToken
 }

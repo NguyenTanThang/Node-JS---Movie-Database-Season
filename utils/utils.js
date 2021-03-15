@@ -6,6 +6,14 @@ const {
 } = require("../constants/variables");
 const uuid = require("uuid");
 
+const getDaysDiff = (date) => {
+    const dateMili = dateToMili(date);
+    const dateNowMili = dateToMili(new Date.now());
+    const diffTime = Math.abs(dateNowMili - dateMili);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays; 
+}
+
 const isObjectEmpty = obj => {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
@@ -54,5 +62,6 @@ module.exports = {
     miliToDate,
     capitalizeFirstLetter,
     exchangeURLToFileDirectory,
-    generateChangePasswordToken
+    generateChangePasswordToken,
+    getDaysDiff
 }

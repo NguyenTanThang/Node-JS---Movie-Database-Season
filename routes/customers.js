@@ -11,7 +11,8 @@ const {
     customerSignup,
     changePassword,
     resetPassword,
-    resetPasswordTokenRequest
+    resetPasswordTokenRequest,
+    getResetPasswordToken
 } = require("../controllers/customerControllers");
 const {
     authenticateToken
@@ -22,6 +23,8 @@ router.get('/', getAllCustomers);
 router.get('/:id', getCustomerByID);
 
 router.get('/validate/:customerID', validateCustomer);
+
+router.get('/reset-password-token/:token', getResetPasswordToken);
 
 router.post('/add', addCustomer);
 
