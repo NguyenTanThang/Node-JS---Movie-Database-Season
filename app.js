@@ -30,6 +30,7 @@ var subscriptionsRouter = require('./routes/subscriptions');
 var momosRouter = require('./routes/momos');
 var zalosRouter = require('./routes/zalos');
 var stripesRouter = require('./routes/stripes');
+var dashboardRouter = require('./routes/dashboard');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/genres', genresRouter);
 app.use('/subtitles', subtitlesRouter);

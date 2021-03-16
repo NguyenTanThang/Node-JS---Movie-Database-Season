@@ -5,6 +5,15 @@ const {
     MILI_IN_DAY
 } = require("../constants/variables");
 const uuid = require("uuid");
+const moment = require("moment");
+
+const parseDateMoment = (date) => {
+    return moment(date).format('MMM Do YYYY');
+}
+
+const getParseDateMomentYear = (date) => {
+    return moment(date).format('YYYY');
+}
 
 const getDaysDiff = (date) => {
     const dateMili = dateToMili(date);
@@ -63,5 +72,7 @@ module.exports = {
     capitalizeFirstLetter,
     exchangeURLToFileDirectory,
     generateChangePasswordToken,
-    getDaysDiff
+    getDaysDiff,
+    parseDateMoment,
+    getParseDateMomentYear
 }
