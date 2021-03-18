@@ -3,7 +3,7 @@ const MONGODB_URI = `mongodb+srv://test:123456a@tanthang.b7rfb.mongodb.net/test-
 const CURRENT_URL = `https://node-js-movie-database-season.herokuapp.com`;
 //const CURRENT_URL = `http://localhost:5000`;
 
-const CURRENT_CLIENT_URL = `https://react-js-movie-database-season-client.netlify.app/`
+const CURRENT_CLIENT_URL = `https://lets-flix-client.netlify.app/`
 
 const getOMDBURL = (IMDB_ID) => {
     return `https://www.omdbapi.com/?i=${IMDB_ID}&apikey=a8ef1841`
