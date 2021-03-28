@@ -3,7 +3,8 @@ const Session = require("../models/Session");
 const Subscription = require("../models/Subscription");
 const {removeAllExpiredSession} = require("../requests/sessionRequests");
 const {parseDateMoment,
-    getParseDateMomentYear} = require("../utils/utils");
+    getParseDateMomentYear,
+    getDaysDiffVerbose} = require("../utils/utils");
 
 const getCustomerDashboardData = async (req, res) => {
     try {
@@ -22,10 +23,14 @@ const getCustomerDashboardData = async (req, res) => {
             }
         });
         subscriptions.forEach(subscription => {
-            if (!subscribedCustomer.includes(subscription.customerID)) {
+            console.log(getDaysDiffVerbose(subscription.ended_date))
+            console.log(parseDateMoment(subscription.ended_date))
+            if (!subscribedCustomer.includes(subscription.customerID) && getDaysDiffVerbose(subscription.ended_date) > 0) {
                 subscribedCustomer.push(subscription.customerID);
             }
         })
+
+        console.log(subscribedCustomer);
  
         res.json({
             success: true,

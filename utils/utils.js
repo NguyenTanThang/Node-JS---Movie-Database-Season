@@ -23,6 +23,17 @@ const getDaysDiff = (date) => {
     return diffDays; 
 }
 
+const getDaysDiffVerbose = (date) => {
+    const dateMili = dateToMili(date);
+    const dateNowMili = dateToMili(Date.now());
+    const diffTime = Math.abs(dateNowMili - dateMili);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (dateNowMili > dateMili) {
+        diffDays = -diffDays;
+    }
+    return diffDays; 
+}
+
 const isObjectEmpty = obj => {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
@@ -74,5 +85,6 @@ module.exports = {
     generateChangePasswordToken,
     getDaysDiff,
     parseDateMoment,
-    getParseDateMomentYear
+    getParseDateMomentYear,
+    getDaysDiffVerbose
 }
