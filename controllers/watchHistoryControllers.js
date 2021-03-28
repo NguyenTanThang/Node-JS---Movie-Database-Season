@@ -115,6 +115,19 @@ const getWatchHistoryByID = async (req, res) => {
 const addWatchHistory = async (req, res) => {
     try {
         let {movieID, customerID} = req.body;
+
+        const existedWatchHistory = await WatchHistory.find({
+            movieID, customerID
+        });
+
+        if (existedWatchHistory) {
+            res.json({
+                success: true,
+                data: existedWatchHistory,
+                message: `Successfully created ${A_OR_AN} ${APP_NAME}`
+            })
+        }
+
         const created_date = Date.now();
 
         const watchHistory = await new WatchHistory({
