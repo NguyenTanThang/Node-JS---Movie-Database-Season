@@ -50,7 +50,6 @@ const editSubscriptionSchema = Joi.object({
 
 const addManagerSchema = Joi.object({
     username: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
@@ -63,7 +62,6 @@ const addManagerSchema = Joi.object({
 
 const loginManagerSchema = Joi.object({
     username: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
@@ -74,7 +72,6 @@ const loginManagerSchema = Joi.object({
 
 const editManagerSchema = Joi.object({
     username: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
@@ -88,12 +85,10 @@ const editManagerSchema = Joi.object({
 
 const changePasswordManager = Joi.object({
     oldPassword: Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required(),
     newPassword:  Joi.string()
-        .alphanum()
         .min(3)
         .max(30)
         .required()
