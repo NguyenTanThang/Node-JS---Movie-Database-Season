@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema({
     movieID: {
-        type: Schema.ObjectId,
-        ref: "movies"
+        type: String,
+        required: true
     },
     customerID: {
         type: String,
