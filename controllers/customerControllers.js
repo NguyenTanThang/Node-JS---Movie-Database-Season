@@ -997,7 +997,7 @@ const customerLogin = async (req, res) => {
       return res.json({
         success: false,
         data: null,
-        message: `This account has reached the maximum number of concurrent users`,
+        message: `This account has reached the maximum number of concurrent users. Make sure that you logout from other devices`,
         status: 200
       })
     }
