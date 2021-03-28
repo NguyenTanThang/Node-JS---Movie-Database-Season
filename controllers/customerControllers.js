@@ -1366,11 +1366,13 @@ const getCustomerByID = async (req, res) => {
 const addCustomer = async (req, res) => {
   try {
     let {
+      username,
       email,
       password,
       validated
     } = req.body;
     const validation = addCustomerSchema.validate({
+      username,
       email,
       password
     });
@@ -1401,6 +1403,7 @@ const addCustomer = async (req, res) => {
 
     password = encrypt(password);
     let customer = await new Customer({
+      username,
       email,
       password,
       validated,
