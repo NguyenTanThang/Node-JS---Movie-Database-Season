@@ -11,7 +11,7 @@ const {
 const {
   generateCustomerValidationLink,
   generateChangePasswordToken,
-  getDaysDiff
+  getDaysDiffVerbose
 } = require("../utils/utils");
 const {
   encrypt,
@@ -1268,7 +1268,10 @@ const getResetPasswordToken = async (req, res) => {
       expiryDate
     } = resetPasswordToken;
 
-    if (getDaysDiff(expiryDate) <= 0) {
+    console.log(resetPasswordToken.expiryDate);
+    console.log(getDaysDiffVerbose(resetPasswordToken.expiryDate))
+
+    if (getDaysDiffVerbose(resetPasswordToken.expiryDate) <= 0) {
       return res.json({
         success: false,
         data: null,
@@ -1279,7 +1282,7 @@ const getResetPasswordToken = async (req, res) => {
 
     const customer = await Customer.findById(customerID);
 
-    res.json({
+    return res.json({
       success: true,
       data: customer,
       status: 200
