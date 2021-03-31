@@ -6,6 +6,7 @@ const createSession = async (token, customerID) => {
         const session = await new Session({
             token, customerID,
             expiry_date: new Date(Date.now() + 300000),
+            //expiry_date: new Date(Date.now() + 60 * 1000 * 2),
             created_date: Date.now()
         }).save();
         

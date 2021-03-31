@@ -64,9 +64,7 @@ const reformAllMovies = async (req, res) => {
 const getAllMovies = async (req, res) => {
     try {
         let movies = await Movie.find().sort([['created_date', 'descending']]);
-        console.log(movies);
         
-
         res.status(200).json({
             success: true,
             data: movies,

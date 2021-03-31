@@ -77,6 +77,7 @@ const refreshSession = async (req, res) => {
 
         session = await Session.findByIdAndUpdate(sessionID, {
             expiry_date: new Date(Date.now() + 300000)
+            //expiry_date: new Date(Date.now() + 60 * 1000 * 2),
         });
 
         res.json({
