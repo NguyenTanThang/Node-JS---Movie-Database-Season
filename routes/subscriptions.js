@@ -9,6 +9,10 @@ const {
     getSubscriptionByCustomerID,
     getSubscriptionStatusByCustomerID
 } = require("../controllers/subscriptionControllers");
+const {
+    authenticateToken,
+    allowAdmin
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllSubscriptions);
 
@@ -20,8 +24,8 @@ router.get('/status/customerID/:customerID', getSubscriptionStatusByCustomerID);
 
 router.post('/add', addSubscription);
 
-router.put('/edit/:id', editSubscription);
+router.put('/edit/:id', authenticateToken, allowAdmin, editSubscription);
 
-router.delete('/delete/:id', deleteSubscription);
+router.delete('/delete/:id', authenticateToken, allowAdmin, deleteSubscription);
 
 module.exports = router;

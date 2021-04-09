@@ -11,6 +11,9 @@ const {
     getSubtitlesByMovieID,
     getSubtitlesByEpisodeID
 } = require("../controllers/subtitlesControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllSubtitles);
 
@@ -20,14 +23,14 @@ router.get('/movieID/:movieID', getSubtitlesByMovieID);
 
 router.get('/episodeID/:episodeID', getSubtitlesByEpisodeID);
 
-router.post('/add', addSubtitle);
+router.post('/add', authenticateToken, addSubtitle);
 
-router.put('/edit/:id', editSubtitle);
+router.put('/edit/:id', authenticateToken, editSubtitle);
 
-router.delete('/delete/:id', deleteSubtitle);
+router.delete('/delete/:id', authenticateToken, deleteSubtitle);
 
-router.delete('/delete/movieID/:movieID', deleteSubtitleByMovieID);
+router.delete('/delete/movieID/:movieID', authenticateToken, deleteSubtitleByMovieID);
 
-router.delete('/delete/episodeID/:episodeID', deleteSubtitleByEpisodeID);
+router.delete('/delete/episodeID/:episodeID', authenticateToken, deleteSubtitleByEpisodeID);
 
 module.exports = router;

@@ -7,15 +7,18 @@ const {
     editGenre,
     deleteGenre,
 } = require("../controllers/genreControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllGenres);
 
 router.get('/:id', getGenreByID);
 
-router.post('/add', addGenre);
+router.post('/add', authenticateToken, addGenre);
 
-router.put('/edit/:id', editGenre);
+router.put('/edit/:id', authenticateToken, editGenre);
 
-router.delete('/delete/:id', deleteGenre);
+router.delete('/delete/:id', authenticateToken, deleteGenre);
 
 module.exports = router;

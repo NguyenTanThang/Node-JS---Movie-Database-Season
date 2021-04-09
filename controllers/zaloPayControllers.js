@@ -63,7 +63,6 @@ const generateZaloPayURL = async (masterReq, masterRes) => {
         .catch(err => console.log(err));
 }
 
-
 const zaloCallback = async (req, res) => {
 
     const {apptransid, status} = req.query;
@@ -91,7 +90,62 @@ const zaloCallback = async (req, res) => {
     res.redirect(CURRENT_CLIENT_URL);
 }
 
+const generateZaloPayGatewayURL = async (masterReq, masterRes) => {
+    const gatewayConfig = {
+        app_id: "553",
+        key1: "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
+        key2: "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3",
+        endpoint: "https://sandbox.zalopay.com.vn/v001/tpe/createorder",
+        bankcode: ""
+    };
+      
+    const {amount, planID, customerID} = masterReq.params;
+
+    const embed_data = {};
+
+    const items = [{}];
+    const transID = Math.floor(Math.random() * 1000000);
+    const order = {
+        app_id: gatewayConfig.app_id,
+        app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // translation missing: vi.docs.shared.sample_code.comments.app_trans_id
+        app_user: "user123",
+        app_time: Date.now(), // miliseconds
+        item: JSON.stringify(items),
+        embed_data: JSON.stringify(embed_data),
+        amount,
+        description: `Let's Flix - Payment for the order #${transID}`,
+        bank_code: gatewayConfig.bankcode,
+    };
+
+    // appid|app_trans_id|appuser|amount|apptime|embeddata|item
+    const data = gatewayConfig.app_id + "|" + order.apptransid + "|" + order.appuser + "|" + order.amount + "|" + order.apptime + "|" + order.embeddata + "|" + order.item;
+    order.mac = CryptoJS.HmacSHA256(data, gatewayConfig.key1).toString();
+    
+    const zaloPayment = await new ZaloPayment({
+        appTransID: order.app_trans_id,
+        appID: gatewayConfig.app_id,
+        macID: order.mac,
+        amount,
+        customerID,
+        planID
+    }).save();
+    console.log(zaloPayment);
+
+    axios.post(gatewayConfig.endpoint, null, {
+            params: order,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(res => {
+            console.log(res.data);
+            masterRes.json(res.data);
+        })
+        .catch(err => console.log(err));
+} 
+
 module.exports = {
     zaloCallback,
-    generateZaloPayURL
+    generateZaloPayURL,
+    generateZaloPayGatewayURL
 }

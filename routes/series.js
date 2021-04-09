@@ -10,6 +10,9 @@ const {
     getAllSeriesByGenre,
     checkURLUsageSeries
 } = require("../controllers/seriesControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/reformAll', reformAllSeries);
 
@@ -21,10 +24,10 @@ router.get('/:id', getSeriesByID);
 
 router.get('/checkURLUsage/:id', checkURLUsageSeries);
 
-router.post('/add', addSeries);
+router.post('/add', authenticateToken, addSeries);
 
-router.put('/edit/:id', editSeries);
+router.put('/edit/:id', authenticateToken, editSeries);
 
-router.delete('/delete/:id', deleteSeries);
+router.delete('/delete/:id', authenticateToken, deleteSeries);
 
 module.exports = router;

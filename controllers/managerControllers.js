@@ -12,10 +12,14 @@ const {
     loginManagerSchema,
     changePasswordManager
 } = require("../utils/validator");
+const {
+    createToken
+} = require("../utils/jwtAuth");
 
 const getAllManagers = async (req, res) => {
     try {
-        const managers = await Manager.find().populate('roleID').exec();
+        const managers = await Manager.find()
+        .populate('roleID').exec();
 
         res.json({
             success: true,
@@ -156,9 +160,14 @@ const managerLogin = async (req, res) => {
             })
         }
 
+        const token = createToken({
+            ...existedManager._doc
+        });
+
         res.json({
             success: true,
             data: existedManager,
+            token,
             message: `Successfully logged in`,
             status: 200
         })

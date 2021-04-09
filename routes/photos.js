@@ -13,6 +13,9 @@ const {
     deletePhotoBySeriesID,
     deletePhotoBySeasonID,
 } = require("../controllers/photoControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllPhotos);
 
@@ -22,14 +25,14 @@ router.get('/movieID/:movieID', getPhotosByMovieID);
 router.get('/seriesID/:seriesID', getPhotosBySeriesID);
 router.get('/seasonID/:seasonID', getPhotosBySeasonID);
 
-router.post('/add', addPhoto);
+router.post('/add', authenticateToken, addPhoto);
 
-router.put('/edit/:id', editPhoto);
+router.put('/edit/:id', authenticateToken, editPhoto);
 
-router.delete('/delete/:id', deletePhoto);
+router.delete('/delete/:id', authenticateToken, deletePhoto);
 
-router.delete('/delete/movieID/:movieID', deletePhotoByMovieID);
-router.delete('/delete/seriesID/:seriesID', deletePhotoBySeriesID);
-router.delete('/delete/seasonID/:seasonID', deletePhotoBySeasonID);
+router.delete('/delete/movieID/:movieID', authenticateToken, deletePhotoByMovieID);
+router.delete('/delete/seriesID/:seriesID', authenticateToken, deletePhotoBySeriesID);
+router.delete('/delete/seasonID/:seasonID', authenticateToken, deletePhotoBySeasonID);
 
 module.exports = router;

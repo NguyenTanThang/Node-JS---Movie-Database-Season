@@ -9,19 +9,23 @@ const {
     managerLogin,
     changePassword
 } = require("../controllers/managerControllers");
+const {
+    authenticateToken,
+    allowAdmin
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllManagers);
 
 router.get('/:id', getManagerByID);
 
-router.post('/add', addManager);
+router.post('/add', authenticateToken, allowAdmin, addManager);
 
 router.post('/login', managerLogin);
 
-router.put('/edit/:id', editManager);
+router.put('/edit/:id', authenticateToken, allowAdmin, editManager);
 
 router.put('/change-password/:id', changePassword);
 
-router.delete('/delete/:id', deleteManager);
+router.delete('/delete/:id', authenticateToken, allowAdmin,deleteManager);
 
 module.exports = router;
