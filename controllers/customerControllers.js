@@ -1223,7 +1223,7 @@ const resetPassword = async (req, res) => {
       expiryDate
     } = resetPasswordToken;
 
-    if (getDaysDiff(expiryDate) <= 0) {
+    if (getDaysDiffVerbose(expiryDate) <= 0) {
       return res.json({
         success: false,
         data: null,
@@ -1494,6 +1494,7 @@ const editCustomer = async (req, res) => {
         avatar,
         email,
         validated,
+        avatar,
         password,
         last_modified_date
       });
@@ -1502,6 +1503,7 @@ const editCustomer = async (req, res) => {
         username,
         avatar,
         email,
+        avatar,
         validated,
         last_modified_date
       });
