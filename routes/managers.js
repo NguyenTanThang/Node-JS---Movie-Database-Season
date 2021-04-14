@@ -14,7 +14,7 @@ const {
     allowAdmin
 } = require("../utils/jwtAuth");
 
-router.get('/', getAllManagers);
+router.get('/', authenticateToken, allowAdmin, getAllManagers);
 
 router.get('/:id', getManagerByID);
 
