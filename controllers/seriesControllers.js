@@ -196,6 +196,29 @@ const getSeriesByID = async (req, res) => {
     }
 }
 
+const getSeriesByIMDB_ID = async (req, res) => {
+    try {
+        const {
+            IMDB_ID
+        } = req.params;
+        const series = await Series.findOne({IMDB_ID});
+        
+        res.json({
+            success: true,
+            data: series,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const addSeries = async (req, res) => {
     try {
         let {
@@ -393,5 +416,6 @@ module.exports = {
     deleteSeries,
     reformAllSeries,
     getAllSeriesByGenre,
-    checkURLUsageSeries
+    checkURLUsageSeries,
+    getSeriesByIMDB_ID
 }

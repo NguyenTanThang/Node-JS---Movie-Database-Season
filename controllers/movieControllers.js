@@ -228,6 +228,29 @@ const getMovieByID = async (req, res) => {
     }
 }
 
+const getMovieByIMDB_ID = async (req, res) => {
+    try {
+        const {
+            IMDB_ID
+        } = req.params;
+        const movie = await Movie.findOne({IMDB_ID});
+        
+        res.json({
+            success: true,
+            data: movie,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const addMovie = async (req, res) => {
     try {
         let {
@@ -455,5 +478,6 @@ module.exports = {
     deleteMovie,
     reformAllMovies,
     getAllMoviesByGenre,
-    checkURLUsageMovie
+    checkURLUsageMovie,
+    getMovieByIMDB_ID
 }

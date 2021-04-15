@@ -8,7 +8,8 @@ const {
     deleteSeries,
     reformAllSeries,
     getAllSeriesByGenre,
-    checkURLUsageSeries
+    checkURLUsageSeries,
+    getSeriesByIMDB_ID
 } = require("../controllers/seriesControllers");
 const {
     authenticateToken
@@ -21,6 +22,8 @@ router.get('/', getAllSeries);
 router.get('/genre/:genre', getAllSeriesByGenre);
 
 router.get('/:id', getSeriesByID);
+
+router.get('/IMDB_ID/:IMDB_ID', getSeriesByIMDB_ID);
 
 router.get('/checkURLUsage/:id', checkURLUsageSeries);
 

@@ -8,7 +8,8 @@ const {
     deleteMovie,
     reformAllMovies,
     getAllMoviesByGenre,
-    checkURLUsageMovie
+    checkURLUsageMovie,
+    getMovieByIMDB_ID
 } = require("../controllers/movieControllers");
 const {
     authenticateToken
@@ -21,6 +22,8 @@ router.get('/genre/:genre', getAllMoviesByGenre);
 router.get('/reform', reformAllMovies);
 
 router.get('/:id', getMovieByID);
+
+router.get('/IMDB_ID/:IMDB_ID', getMovieByIMDB_ID);
 
 router.get('/checkURLUsage/:id', checkURLUsageMovie);
 
