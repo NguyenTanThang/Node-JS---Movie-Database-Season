@@ -9,7 +9,9 @@ const {
     reformAllMovies,
     getAllMoviesByGenre,
     checkURLUsageMovie,
-    getMovieByIMDB_ID
+    getMovieByIMDB_ID,
+    addMovieValidation,
+    editMovieValidation
 } = require("../controllers/movieControllers");
 const {
     authenticateToken
@@ -29,7 +31,11 @@ router.get('/checkURLUsage/:id', checkURLUsageMovie);
 
 router.post('/add', authenticateToken, addMovie);
 
+router.post('/validation/add', addMovieValidation);
+
 router.put('/edit/:id', authenticateToken, editMovie);
+
+router.put('/validation/edit/:id', editMovieValidation);
 
 router.delete('/delete/:id', authenticateToken, deleteMovie);
 

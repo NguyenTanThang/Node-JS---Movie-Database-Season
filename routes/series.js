@@ -9,13 +9,15 @@ const {
     reformAllSeries,
     getAllSeriesByGenre,
     checkURLUsageSeries,
-    getSeriesByIMDB_ID
+    getSeriesByIMDB_ID,
+    addSeriesValidation,
+    editSeriesValidation
 } = require("../controllers/seriesControllers");
 const {
     authenticateToken
 } = require("../utils/jwtAuth");
 
-router.get('/reformAll', reformAllSeries);
+router.get('/reform', reformAllSeries);
 
 router.get('/', getAllSeries);
 
@@ -29,7 +31,11 @@ router.get('/checkURLUsage/:id', checkURLUsageSeries);
 
 router.post('/add', authenticateToken, addSeries);
 
+router.post('/validation/add', addSeriesValidation);
+
 router.put('/edit/:id', authenticateToken, editSeries);
+
+router.put('/validation/edit/:id', editSeriesValidation);
 
 router.delete('/delete/:id', authenticateToken, deleteSeries);
 

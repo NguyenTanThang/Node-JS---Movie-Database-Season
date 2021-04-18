@@ -16,6 +16,40 @@ const {
     createToken
 } = require("../utils/jwtAuth");
 
+const reformAllManagers = async (req, res) => {
+    try {
+        let managers = await Manager
+        .find()
+        .populate('roleID')
+        .exec();
+
+        for (let i = 0; i < managers.length; i++) {
+            const manager = managers[i];
+            await Manager.findByIdAndUpdate(manager._id, {
+                status: true
+            });
+        }
+
+        managers = await Manager.find()
+        .populate('roleID').exec();
+
+        res.json({
+            success: true,
+            data: managers,
+            length: managers.length,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const getAllManagers = async (req, res) => {
     try {
         const managers = await Manager.find()
@@ -260,7 +294,8 @@ const editManager = async (req, res) => {
         let {
             username,
             password,
-            roleID
+            roleID,
+            status
         } = req.body;
 
         const validation = editManagerSchema.validate({
@@ -309,12 +344,14 @@ const editManager = async (req, res) => {
                 username,
                 password,
                 roleID,
+                status,
                 last_modified_date
             });
         } else {
             manager = await Manager.findByIdAndUpdate(id, {
                 username,
                 roleID,
+                status,
                 last_modified_date
             });
         }
@@ -378,5 +415,6 @@ module.exports = {
     editManager,
     deleteManager,
     managerLogin,
-    changePassword
+    changePassword,
+    reformAllManagers
 }

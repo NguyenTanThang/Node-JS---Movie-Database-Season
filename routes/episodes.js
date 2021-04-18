@@ -9,6 +9,9 @@ const {
     deleteEpisode,
     deleteEpisodeWithSeasonIDAndEpNum,
     checkURLUsageEpisode,
+    addEpsiodeValidation,
+    editEpsiodeValidation,
+    reformAllEpisodes
 } = require("../controllers/episodeControllers");
 const {
     authenticateToken
@@ -16,15 +19,21 @@ const {
 
 router.get('/', getAllEpisodes);
 
+router.get('/reform', reformAllEpisodes);
+
 router.get('/:id', getEpisodeByID);
 
 router.get('/seasonID/:seasonID', getEpisodeBySeasonID);
 
-router.get('/checkURLUsage/seasonID/:seasonID', checkURLUsageEpisode)
+router.get('/checkURLUsage/seasonID/:seasonID', checkURLUsageEpisode);
 
 router.post('/add', authenticateToken, addEpisode);
 
+router.post('/validation/add', addEpsiodeValidation);
+
 router.put('/edit/:id', authenticateToken, editEpisode);
+
+router.put('/validation/edit/:id', editEpsiodeValidation);
 
 router.delete('/delete/:id', authenticateToken, deleteEpisode);
 

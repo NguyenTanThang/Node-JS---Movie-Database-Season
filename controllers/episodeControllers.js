@@ -8,6 +8,73 @@ const {
     removeSubtitleByVideoURL
 } = require("../requests/subtitleRequests");
 
+const reformAllEpisodes = async (req, res) => {
+    try {
+        let episodes = await Episode.find().sort([['created_date', 'ascending']]);
+
+        /*
+        for (let index = 0; index < movies.length; index++) {
+            const movie = movies[index];
+            const {_id} = movie;
+            
+            await Movie.findByIdAndUpdate(_id, {
+                rating: 0
+            })
+        }
+        */
+
+       for (let index = 0; index < episodes.length; index++) {
+            const episode = episodes[index];
+            const {_id} = episode;
+        
+            await Episode.findByIdAndUpdate(_id, {
+                rating: 0
+            })
+        }
+
+        episodes = await Episode.find().sort([['created_date', 'ascending']]);
+        
+        /*
+
+        var obj = {
+            movies: []
+         };
+
+        for (let index = 0; index < movies.length; index++) {
+            const movie = movies[index];
+            obj.movies.push(movie._doc);
+        }
+
+        var json = JSON.stringify(obj);
+        var fileURL = `E:/Test Things Out/Test Movies Website (refined) (act 2)/1. Official/sever/seeders/jsonFiles/movies.json`
+
+        var exists = fs.existsSync(fileURL);
+
+        if (exists) {
+            fs.unlinkSync(fileURL);
+        }
+
+        fs.writeFileSync(fileURL, json, 'utf8');
+
+        */
+
+        res.status(200).json({
+            success: true,
+            data: episodes,
+            length: episodes.length,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const getAllEpisodes = async (req, res) => {
     try {
         const episodes = await Episode.find();
@@ -132,6 +199,75 @@ const checkURLUsageEpisode = async (req, res) => {
                 episodeList,
                 episodeURLUsage
             },
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const addEpsiodeValidation = async (req, res) => {
+    try {
+        let {
+            seasonID,
+            episodeNum
+        } = req.body;
+
+        const existedEpisodeNum = await Episode.find({
+            seasonID,
+            episodeNum
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedEpisodeNum
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const editEpsiodeValidation = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+        let {
+            seasonID,
+            episodeNum
+        } = req.body;
+
+        let existedEpisodeNum = await Episode.find({
+            seasonID,
+            episodeNum
+        });
+
+        existedEpisodeNum = existedEpisodeNum.filter(existedEpisodeNumItem => {
+            return existedEpisodeNumItem._id != id;
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedEpisodeNum
+            },
+            message: ``,
             status: 200
         })
     } catch (error) {
@@ -285,4 +421,7 @@ module.exports = {
     deleteEpisode,
     deleteEpisodeWithSeasonIDAndEpNum,
     checkURLUsageEpisode,
+    addEpsiodeValidation,
+    editEpsiodeValidation,
+    reformAllEpisodes
 }

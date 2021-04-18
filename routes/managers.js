@@ -7,12 +7,15 @@ const {
     editManager,
     deleteManager,
     managerLogin,
-    changePassword
+    changePassword,
+    reformAllManagers
 } = require("../controllers/managerControllers");
 const {
     authenticateToken,
     allowAdmin
 } = require("../utils/jwtAuth");
+
+//router.get('/reform', reformAllManagers);
 
 router.get('/', authenticateToken, allowAdmin, getAllManagers);
 

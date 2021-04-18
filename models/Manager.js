@@ -16,6 +16,10 @@ const schema = new Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: Boolean,
+        default: true
+    },
     last_modified_date: {
         type: Date,
         default: Date.now()
