@@ -17,9 +17,11 @@ var endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
 var hostname = "https://test-payment.momo.vn"
 var path = "/gw_payment/transactionProcessor"
 
+/*
 var partnerCode = "MOMOAVD320201026"
 var accessKey = "5dSfBkOKPBjFAwpj"
 var secretKey = "RlaUY2vtf66FzVoL7X6ugYqa1k3MqJJu"
+*/
 
 /*
 var partnerCode = "MOMO"
@@ -27,11 +29,9 @@ var accessKey = "F8BBA842ECF85"
 var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
 */
 
-/*
 var partnerCode = "MOMOBKUN20180529"
 var accessKey = "klm05TvNBzhg7h7j"
 var secretKey = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa"
-*/
 
 var returnUrl = `${CURRENT_URL}/momos/callback`
 var notifyurl = `${CURRENT_URL}/momos/callback`
