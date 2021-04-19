@@ -3,6 +3,7 @@ const A_OR_AN = "a";
 const APP_NAME = "plan";
 const {addPlanSchema, getMessage} = require("../utils/validator");
 const {usdToVnd} = require("../constants/subscriptionData");
+const {getPaypalAuthorizationToken} = require("../requests/paypalRequests");
 
 const getPlanByPrice = async (req, res) => {
     try {

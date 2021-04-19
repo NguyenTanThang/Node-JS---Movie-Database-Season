@@ -30,6 +30,7 @@ var commentsRouter = require('./routes/comments');
 var subscriptionsRouter = require('./routes/subscriptions');
 var momosRouter = require('./routes/momos');
 var zalosRouter = require('./routes/zalos');
+var paypalRouter = require('./routes/paypal');
 var stripesRouter = require('./routes/stripes');
 var dashboardRouter = require('./routes/dashboard');
 
@@ -62,6 +63,7 @@ app.use('/episodes', episodesRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/momos', momosRouter);
 app.use('/zalos', zalosRouter);
+app.use('/paypal', paypalRouter);
 app.use('/stripes', stripesRouter);
 app.use('/plans', plansRouter);
 app.use('/comments', commentsRouter);
