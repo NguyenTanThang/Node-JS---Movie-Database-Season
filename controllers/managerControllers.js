@@ -142,7 +142,9 @@ const addManager = async (req, res) => {
         const manager = await new Manager({
             username,
             password,
-            roleID
+            roleID,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

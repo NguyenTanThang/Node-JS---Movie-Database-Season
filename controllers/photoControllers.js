@@ -152,7 +152,9 @@ const addPhoto = async (req, res) => {
         */
 
         const photo = await new Photo({
-            recordID, photoURL
+            recordID, photoURL,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

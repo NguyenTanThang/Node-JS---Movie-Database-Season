@@ -370,7 +370,9 @@ const addSeries = async (req, res) => {
             trailerURL,
             posterURL,
             IMDB_ID,
-            imdbSeries
+            imdbSeries,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

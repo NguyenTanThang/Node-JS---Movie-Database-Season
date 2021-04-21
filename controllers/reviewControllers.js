@@ -221,7 +221,9 @@ const addReview = async (req, res) => {
         const review = await new Review({
             grading,
             customerID,
-            movieID
+            movieID,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         const existedMovie = await getMovieByID(movieID);

@@ -132,10 +132,10 @@ const addWatchHistory = async (req, res) => {
             })
         }
 
-        const created_date = Date.now();
-
         const watchHistory = await new WatchHistory({
-            movieID, customerID, created_date
+            movieID, customerID,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

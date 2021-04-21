@@ -128,7 +128,9 @@ const addSubtitle = async (req, res) => {
         */
 
         const sub = await new Subtitle({
-            videoID, languageLabel, subtitleURL
+            videoID, languageLabel, subtitleURL,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

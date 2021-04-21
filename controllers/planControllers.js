@@ -117,7 +117,9 @@ const addPlan = async (req, res) => {
         }
 
         const plan = await new Plan({
-            name, price, priceVND: usdToVnd(price), description, durationInDays
+            name, price, priceVND: usdToVnd(price), description, durationInDays,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

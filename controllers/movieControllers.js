@@ -416,7 +416,8 @@ const addMovie = async (req, res) => {
             posterURL,
             IMDB_ID,
             imdbMovie,
-            created_date: Date.now()
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

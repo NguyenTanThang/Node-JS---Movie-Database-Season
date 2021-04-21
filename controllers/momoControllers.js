@@ -70,7 +70,9 @@ const callBackURL = async (req, res) => {
         const subscription = await new Subscription({
             customerID: existedPayment.customerID,
             planID: existedPlan._id,
-            ended_date: miliToDate(durationInMili)
+            ended_date: miliToDate(durationInMili),
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
     } else {
     };

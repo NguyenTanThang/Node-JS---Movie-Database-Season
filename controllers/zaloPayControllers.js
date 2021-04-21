@@ -49,7 +49,9 @@ const generateZaloPayURL = async (masterReq, masterRes) => {
         macID: order.mac,
         amount,
         customerID,
-        planID
+        planID,
+        created_date: Date.now(),
+        last_modified_date: Date.now()
     }).save();
     console.log(zaloPayment);
 
@@ -76,7 +78,9 @@ const zaloCallback = async (req, res) => {
         const subscription = await new Subscription({
             customerID: existedPayment.customerID,
             planID: existedPlan._id,
-            ended_date: miliToDate(durationInMili)
+            ended_date: miliToDate(durationInMili),
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
     }
 
@@ -127,7 +131,9 @@ const generateZaloPayGatewayURL = async (masterReq, masterRes) => {
         macID: order.mac,
         amount,
         customerID,
-        planID
+        planID,
+        created_date: Date.now(),
+        last_modified_date: Date.now()
     }).save();
     console.log(zaloPayment);
 

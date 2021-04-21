@@ -77,7 +77,9 @@ const addGenre = async (req, res) => {
         }
 
         const genre = await new Genre({
-            name
+            name,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

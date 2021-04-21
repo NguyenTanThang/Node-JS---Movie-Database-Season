@@ -1410,7 +1410,9 @@ const addCustomer = async (req, res) => {
       email,
       password,
       validated,
-      stripeCustomerID: stripeCustomer.id
+      stripeCustomerID: stripeCustomer.id,
+      created_date: Date.now(),
+      last_modified_date: Date.now()
     }).save();
 
     const returnedCustomerItem = {

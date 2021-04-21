@@ -334,7 +334,9 @@ const addSeason = async (req, res) => {
             description,
             trailerURL,
             posterURL,
-            seasonNum
+            seasonNum,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

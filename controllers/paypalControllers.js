@@ -35,7 +35,9 @@ const paypalCallback = async (req, res) => {
                                 customerID,
                                 amount,
                                 planID,
-                                status
+                                status,
+                                created_date: Date.now(),
+                                last_modified_date: Date.now()
                             }).save();
     
                             const existedPlan = await Plan.findById(planID);
@@ -45,7 +47,9 @@ const paypalCallback = async (req, res) => {
                             const subscription = await new Subscription({
                                 customerID: customerID,
                                 planID: planID,
-                                ended_date: miliToDate(durationInMili)
+                                ended_date: miliToDate(durationInMili),
+                                created_date: Date.now(),
+                                last_modified_date: Date.now()
                             }).save();
                         }
     

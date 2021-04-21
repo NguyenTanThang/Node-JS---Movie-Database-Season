@@ -295,7 +295,9 @@ const addEpisode = async (req, res) => {
             description,
             seasonID,
             episodeURL,
-            episodeNum
+            episodeNum,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

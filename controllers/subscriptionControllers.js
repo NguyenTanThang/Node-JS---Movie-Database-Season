@@ -161,7 +161,9 @@ const addSubscription = async (req, res) => {
         const subscription = await new Subscription({
             customerID,
             planID,
-            ended_date: miliToDate(durationInMili)
+            ended_date: miliToDate(durationInMili),
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({
@@ -213,7 +215,9 @@ const editSubscription = async (req, res) => {
 
         const subscription = await Subscription.findById(id, {
             planID,
-            ended_date
+            ended_date,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

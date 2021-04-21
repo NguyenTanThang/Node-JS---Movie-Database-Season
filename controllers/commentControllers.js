@@ -91,7 +91,9 @@ const addComment = async (req, res) => {
         }
 
         let comment = await new Comment({
-            customerID, movieSeriesID, content
+            customerID, movieSeriesID, content,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
         comment = await Comment.findById(comment._id)
         .sort({'created_date': -1})

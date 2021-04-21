@@ -109,7 +109,9 @@ const addWatchLater = async (req, res) => {
     try {
         let {movieID, customerID} = req.body;
         const watchLater = await new WatchLater({
-            movieID, customerID
+            movieID, customerID,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({
