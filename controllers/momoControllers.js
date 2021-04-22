@@ -42,10 +42,7 @@ var returnUrl = "https://momo.vn/return"
 var notifyurl = "https://callback.url/notify"
 */
 
-var orderId = uuidv1()
-var requestId = uuidv1()
-var requestType = "captureMoMoWallet"
-var extraData = "merchantName=Payment;merchantId=" //pass empty value if your merchant does not have stores else merchantName=[storeName]; merchantId=[storeId] to identify a transaction map with a physical store
+
 
 const callBackURL = async (req, res) => {
     console.log(req.query)
@@ -95,6 +92,11 @@ const getPayURL = async (request, response) => {
         customerID,
         planID
     } = request.params;
+
+    const orderId = uuidv1()
+    const requestId = uuidv1()
+    const requestType = "captureMoMoWallet"
+    const extraData = "merchantName=Payment;merchantId=" //pass empty value if your merchant does not have stores else merchantName=[storeName]; merchantId=[storeId] to identify a transaction map with a physical store
 
     //before sign HMAC SHA256 with format
     //partnerCode=$partnerCode&accessKey=$accessKey&requestId=$requestId&amount=$amount&orderId=$oderId&orderInfo=$orderInfo&returnUrl=$returnUrl&notifyUrl=$notifyUrl&extraData=$extraData
