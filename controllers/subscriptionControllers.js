@@ -108,6 +108,7 @@ const getSubscriptionStatusByCustomerID = async (req, res) => {
             return res.json({
                 success: true,
                 data: "non-active",
+                subscription,
                 status: 200
             })
         }
@@ -116,6 +117,7 @@ const getSubscriptionStatusByCustomerID = async (req, res) => {
             return res.json({
                 success: true,
                 data: "non-active",
+                subscription,
                 status: 200
             })
         }
@@ -123,6 +125,7 @@ const getSubscriptionStatusByCustomerID = async (req, res) => {
         res.json({
             success: true,
             data: "active",
+            subscription,
             status: 200
         })
     } catch (error) {

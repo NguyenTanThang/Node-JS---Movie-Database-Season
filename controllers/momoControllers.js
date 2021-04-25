@@ -42,8 +42,6 @@ var returnUrl = "https://momo.vn/return"
 var notifyurl = "https://callback.url/notify"
 */
 
-
-
 const callBackURL = async (req, res) => {
     console.log(req.query)
     const {
