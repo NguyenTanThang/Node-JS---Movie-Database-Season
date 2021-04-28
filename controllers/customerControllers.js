@@ -1,4 +1,5 @@
 const Customer = require("../models/Customer");
+const Comment = require("../models/Comment");
 const ChangePasswordToken = require("../models/ChangePasswordToken");
 const A_OR_AN = "a";
 const APP_NAME = "customer";
@@ -1556,6 +1557,14 @@ const deleteCustomer = async (req, res) => {
 
     const customer = await Customer.findByIdAndDelete(id);
     const stripeCustomer = await deleteStripeCustomer(customer.stripeCustomerID);
+    const comments = await Comment.find({
+      customerID: customer._id
+    });
+
+    for (let i = 0; i < comments.length; i++) {
+      const comment = comments[i];
+      await Comment.findByIdAndDelete(comment._id);
+    }
 
     const returnedCustomerItem = {
       customerItem: customer,
