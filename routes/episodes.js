@@ -9,22 +9,34 @@ const {
     deleteEpisode,
     deleteEpisodeWithSeasonIDAndEpNum,
     checkURLUsageEpisode,
+    addEpsiodeValidation,
+    editEpsiodeValidation,
+    reformAllEpisodes
 } = require("../controllers/episodeControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllEpisodes);
+
+router.get('/reform', reformAllEpisodes);
 
 router.get('/:id', getEpisodeByID);
 
 router.get('/seasonID/:seasonID', getEpisodeBySeasonID);
 
-router.get('/checkURLUsage/seasonID/:seasonID', checkURLUsageEpisode)
+router.get('/checkURLUsage/seasonID/:seasonID', checkURLUsageEpisode);
 
-router.post('/add', addEpisode);
+router.post('/add', authenticateToken, addEpisode);
 
-router.put('/edit/:id', editEpisode);
+router.post('/validation/add', addEpsiodeValidation);
 
-router.delete('/delete/:id', deleteEpisode);
+router.put('/edit/:id', authenticateToken, editEpisode);
 
-router.delete('/delete/seasonID/:seasonID/epNum/:epNum', deleteEpisodeWithSeasonIDAndEpNum);
+router.put('/validation/edit/:id', editEpsiodeValidation);
+
+router.delete('/delete/:id', authenticateToken, deleteEpisode);
+
+router.delete('/delete/seasonID/:seasonID/epNum/:epNum', authenticateToken, deleteEpisodeWithSeasonIDAndEpNum);
 
 module.exports = router;

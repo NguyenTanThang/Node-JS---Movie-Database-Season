@@ -2,23 +2,26 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    roleID: {
-        type: Schema.ObjectId, 
-        ref: 'manager-roles',
-        required: true,
-    },
-    username: {
+    orderID: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    customerID: {
+        type: String,
+        required: true,
+    },
+    amount: {
+        type: String,
+        required: true
+    },
+    planID: {
         type: String,
         required: true,
     },
     status: {
-        type: Boolean,
-        default: true
+        type: String,
+        default: ""
     },
     last_modified_date: {
         type: Date,
@@ -30,4 +33,4 @@ const schema = new Schema({
     }
 });
 
-module.exports = mongoose.model("managers", schema);
+module.exports = mongoose.model("paypal-payments", schema);

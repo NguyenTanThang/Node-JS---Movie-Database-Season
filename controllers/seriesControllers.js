@@ -16,10 +16,11 @@ const {
     capitalizeFirstLetter,
     exchangeURLToFileDirectory
 } = require("../utils/utils");
+var fs = require('fs');
 
 const reformAllSeries = async (req, res) => {
     try {
-        let series = await Series.find().sort([['created_date', 'descending']]);
+        let series = await Series.find().sort([['created_date', 'ascending']]);
 
         for (let index = 0; index < series.length; index++) {
             const seriesItem = series[index];
@@ -32,7 +33,29 @@ const reformAllSeries = async (req, res) => {
             })
         }
 
-        series = await Series.find().sort([['created_date', 'descending']]);
+        series = await Series.find().sort([['created_date', 'ascending']]);
+
+        /*
+        var obj = {
+            series: []
+         };
+
+        for (let index = 0; index < series.length; index++) {
+            const serie = series[index];
+            obj.series.push(serie._doc);
+        }
+
+        var json = JSON.stringify(obj);
+        var fileURL = `E:/Test Things Out/Test Movies Website (refined) (act 2)/1. Official/sever/seeders/jsonFiles/series.json`
+
+        var exists = fs.existsSync(fileURL);
+
+        if (exists) {
+            fs.unlinkSync(fileURL);
+        }
+
+        fs.writeFileSync(fileURL, json, 'utf8');
+        */
 
         res.status(200).json({
             success: true,
@@ -196,6 +219,110 @@ const getSeriesByID = async (req, res) => {
     }
 }
 
+const getSeriesByIMDB_ID = async (req, res) => {
+    try {
+        const {
+            IMDB_ID
+        } = req.params;
+        const series = await Series.findOne({IMDB_ID});
+        
+        res.json({
+            success: true,
+            data: series,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const addSeriesValidation = async (req, res) => {
+    try {
+        let {
+            name,
+            IMDB_ID
+        } = req.body;
+
+        const existedSeriesName = await Series.find({
+            name
+        });
+
+        const existedSeriesIMDB = await Series.find({
+            IMDB_ID
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedSeriesName,
+                existedSeriesIMDB
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const editSeriesValidation = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+        let {
+            name,
+            IMDB_ID
+        } = req.body;
+
+        let existedSeriesName = await Series.find({
+            name
+        });
+
+        let existedSeriesIMDB = await Series.find({
+            IMDB_ID
+        });
+
+        existedSeriesName = existedSeriesName.filter(existedSeriesNameItem => {
+            return existedSeriesNameItem._id != id;
+        });
+
+        existedSeriesIMDB = existedSeriesIMDB.filter(existedSeriesIMDBItem => {
+            return existedSeriesIMDBItem._id != id;
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedSeriesName,
+                existedSeriesIMDB
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const addSeries = async (req, res) => {
     try {
         let {
@@ -243,7 +370,9 @@ const addSeries = async (req, res) => {
             trailerURL,
             posterURL,
             IMDB_ID,
-            imdbSeries
+            imdbSeries,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({
@@ -393,5 +522,8 @@ module.exports = {
     deleteSeries,
     reformAllSeries,
     getAllSeriesByGenre,
-    checkURLUsageSeries
+    checkURLUsageSeries,
+    getSeriesByIMDB_ID,
+    addSeriesValidation,
+    editSeriesValidation
 }

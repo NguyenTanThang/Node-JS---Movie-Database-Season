@@ -46,7 +46,9 @@ const addManagerRole = async (req, res) => {
     try {
         let {role} = req.body;
         const managerRole = await new ManagerRole({
-            role
+            role,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

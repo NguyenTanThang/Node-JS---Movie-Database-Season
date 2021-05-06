@@ -13,6 +13,73 @@ const {
     exchangeURLToFileDirectory
 } = require("../utils/utils");
 
+const reformAllSeasons = async (req, res) => {
+    try {
+        let seasons = await Season.find().sort([['created_date', 'ascending']]);
+
+        /*
+        for (let index = 0; index < movies.length; index++) {
+            const movie = movies[index];
+            const {_id} = movie;
+            
+            await Movie.findByIdAndUpdate(_id, {
+                rating: 0
+            })
+        }
+        */
+
+       for (let index = 0; index < seasons.length; index++) {
+            const season = seasons[index];
+            const {_id} = season;
+        
+            await Season.findByIdAndUpdate(_id, {
+                rating: 0
+            })
+        }
+
+        seasons = await Season.find().sort([['created_date', 'ascending']]);
+        
+        /*
+
+        var obj = {
+            movies: []
+         };
+
+        for (let index = 0; index < movies.length; index++) {
+            const movie = movies[index];
+            obj.movies.push(movie._doc);
+        }
+
+        var json = JSON.stringify(obj);
+        var fileURL = `E:/Test Things Out/Test Movies Website (refined) (act 2)/1. Official/sever/seeders/jsonFiles/movies.json`
+
+        var exists = fs.existsSync(fileURL);
+
+        if (exists) {
+            fs.unlinkSync(fileURL);
+        }
+
+        fs.writeFileSync(fileURL, json, 'utf8');
+
+        */
+
+        res.status(200).json({
+            success: true,
+            data: seasons,
+            length: seasons.length,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const checkURLUsageSeasons = async (req, res) => {
     try {
         const {
@@ -152,6 +219,75 @@ const getSeasonsBySeriesID = async (req, res) => {
     }
 }
 
+const addSeasonValidation = async (req, res) => {
+    try {
+        let {
+            seriesID,
+            seasonNum
+        } = req.body;
+
+        const existedSeasonNum = await Season.find({
+            seriesID,
+            seasonNum
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedSeasonNum
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const editSeasonValidation = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+        let {
+            seriesID,
+            seasonNum
+        } = req.body;
+
+        let existedSeasonNum = await Season.find({
+            seriesID,
+            seasonNum
+        });
+
+        existedSeasonNum = existedSeasonNum.filter(existedSeasonNumItem => {
+            return existedSeasonNumItem._id != id;
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedSeasonNum
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const addSeason = async (req, res) => {
     try {
         let {
@@ -198,7 +334,9 @@ const addSeason = async (req, res) => {
             description,
             trailerURL,
             posterURL,
-            seasonNum
+            seasonNum,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({
@@ -332,5 +470,8 @@ module.exports = {
     addSeason,
     editSeason,
     deleteSeason,
-    getSeasonsBySeriesID
+    getSeasonsBySeriesID,
+    addSeasonValidation,
+    editSeasonValidation,
+    reformAllSeasons
 }

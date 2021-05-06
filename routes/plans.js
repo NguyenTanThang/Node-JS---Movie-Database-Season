@@ -8,6 +8,10 @@ const {
     deletePlan,
     getPlanByPrice
 } = require("../controllers/planControllers");
+const {
+    authenticateToken,
+    allowAdmin
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllPlans);
 
@@ -15,10 +19,10 @@ router.get('/price', getPlanByPrice);
 
 router.get('/:id', getPlanByID);
 
-router.post('/add', addPlan);
+router.post('/add', authenticateToken, allowAdmin, addPlan);
 
-router.put('/edit/:id', editPlan);
+router.put('/edit/:id', authenticateToken, allowAdmin, editPlan);
 
-router.delete('/delete/:id', deletePlan);
+router.delete('/delete/:id', authenticateToken, allowAdmin, deletePlan);
 
 module.exports = router;

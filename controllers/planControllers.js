@@ -3,6 +3,7 @@ const A_OR_AN = "a";
 const APP_NAME = "plan";
 const {addPlanSchema, getMessage} = require("../utils/validator");
 const {usdToVnd} = require("../constants/subscriptionData");
+const {getPaypalAuthorizationToken} = require("../requests/paypalRequests");
 
 const getPlanByPrice = async (req, res) => {
     try {
@@ -116,7 +117,9 @@ const addPlan = async (req, res) => {
         }
 
         const plan = await new Plan({
-            name, price, priceVND: usdToVnd(price), description, durationInDays
+            name, price, priceVND: usdToVnd(price), description, durationInDays,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({

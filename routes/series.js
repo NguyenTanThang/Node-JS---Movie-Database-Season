@@ -8,10 +8,16 @@ const {
     deleteSeries,
     reformAllSeries,
     getAllSeriesByGenre,
-    checkURLUsageSeries
+    checkURLUsageSeries,
+    getSeriesByIMDB_ID,
+    addSeriesValidation,
+    editSeriesValidation
 } = require("../controllers/seriesControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
-router.get('/reformAll', reformAllSeries);
+router.get('/reform', reformAllSeries);
 
 router.get('/', getAllSeries);
 
@@ -19,12 +25,18 @@ router.get('/genre/:genre', getAllSeriesByGenre);
 
 router.get('/:id', getSeriesByID);
 
+router.get('/IMDB_ID/:IMDB_ID', getSeriesByIMDB_ID);
+
 router.get('/checkURLUsage/:id', checkURLUsageSeries);
 
-router.post('/add', addSeries);
+router.post('/add', authenticateToken, addSeries);
 
-router.put('/edit/:id', editSeries);
+router.post('/validation/add', addSeriesValidation);
 
-router.delete('/delete/:id', deleteSeries);
+router.put('/edit/:id', authenticateToken, editSeries);
+
+router.put('/validation/edit/:id', editSeriesValidation);
+
+router.delete('/delete/:id', authenticateToken, deleteSeries);
 
 module.exports = router;

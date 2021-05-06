@@ -1,18 +1,19 @@
-const Subtitle = require("../models/Subtitles");
+const Photo = require("../models/Photo");
 const A_OR_AN = "a";
-const APP_NAME = "subtitles";
+const APP_NAME = "photo";
 const {getMessage} = require("../utils/validator");
 const {getMovieByID} = require("../requests/movieRequests");
-const {getEpisodeByID} = require("../requests/episodeRequests");
+const {getSeriesByID} = require("../requests/seriesRequests");
+const {getSeasonByID} = require("../requests/seasonRequests");
 
-const getAllSubtitles = async (req, res) => {
+const getAllPhotos = async (req, res) => {
     try {
-        const subtitles = await Subtitle.find();
+        const photos = await Photo.find();
 
         res.json({
             success: true,
-            data: subtitles,
-            length: subtitles.length,
+            data: photos,
+            length: photos.length,
             status: 200
         })
     } catch (error) {
@@ -26,12 +27,12 @@ const getAllSubtitles = async (req, res) => {
     }
 }
 
-const getSubtitleByID = async (req, res) => {
+const getPhotoByID = async (req, res) => {
     try {
         const {id} = req.params;
-        const subtitle = await Subtitle.findById(id);
+        const photo = await Photo.findById(id);
 
-        if (!subtitle) {
+        if (!photo) {
             return res.json({
                 success: false,
                 message: `This ${APP_NAME} does not exist`,
@@ -41,7 +42,7 @@ const getSubtitleByID = async (req, res) => {
 
         res.json({
             success: true,
-            data: subtitle,
+            data: photo,
             status: 200
         })
     } catch (error) {
@@ -55,16 +56,16 @@ const getSubtitleByID = async (req, res) => {
     }
 }
 
-const getSubtitlesByMovieID = async (req, res) => {
+const getPhotosByMovieID = async (req, res) => {
     try {
         const {movieID} = req.params;
         const movie = await getMovieByID(movieID);
-        const subtitles = await Subtitle.find({videoID: movie._id});
+        const photos = await Photo.find({recordID: movie._id});
 
         res.json({
             success: true,
-            data: subtitles,
-            length: subtitles.length,
+            data: photos,
+            length: photos.length,
             status: 200,
         })
     } catch (error) {
@@ -78,16 +79,16 @@ const getSubtitlesByMovieID = async (req, res) => {
     }
 }
 
-const getSubtitlesByEpisodeID = async (req, res) => {
+const getPhotosBySeriesID = async (req, res) => {
     try {
-        const {episodeID} = req.params;
-        const episode = await getEpisodeByID(episodeID);
-        const subtitles = await Subtitle.find({videoID: episode._id});
+        const {seriesID} = req.params;
+        const series = await getSeriesByID(seriesID);
+        const photos = await Photo.find({recordID: series._id});
 
         res.json({
             success: true,
-            data: subtitles,
-            length: subtitles.length,
+            data: photos,
+            length: photos.length,
             status: 200,
         })
     } catch (error) {
@@ -101,9 +102,32 @@ const getSubtitlesByEpisodeID = async (req, res) => {
     }
 }
 
-const addSubtitle = async (req, res) => {
+const getPhotosBySeasonID = async (req, res) => {
     try {
-        let {videoID, languageLabel, subtitleURL} = req.body;
+        const {seasonID} = req.params;
+        const season = await getSeasonByID(seasonID);
+        const photos = await Photo.find({recordID: season._id});
+
+        res.json({
+            success: true,
+            data: photos,
+            length: photos.length,
+            status: 200,
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const addPhoto = async (req, res) => {
+    try {
+        let {recordID, photoURL} = req.body;
 
         /*
         const validation = addGenreSchema.validate({name});
@@ -127,15 +151,15 @@ const addSubtitle = async (req, res) => {
         }
         */
 
-        const sub = await new Subtitle({
-            videoID, languageLabel, subtitleURL,
+        const photo = await new Photo({
+            recordID, photoURL,
             created_date: Date.now(),
             last_modified_date: Date.now()
         }).save();
 
         res.json({
             success: true,
-            data: sub,
+            data: photo,
             message: `Successfully created ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
@@ -150,10 +174,10 @@ const addSubtitle = async (req, res) => {
     }
 }
 
-const editSubtitle = async (req, res) => {
+const editPhoto = async (req, res) => {
     try {
         const {id} = req.params;
-        let {videoID, languageLabel, subtitleURL} = req.body;
+        let {recordID, photoURL} = req.body;
 
         /*
         const validation = addGenreSchema.validate({name});
@@ -188,13 +212,13 @@ const editSubtitle = async (req, res) => {
         */
 
         const last_modified_date = Date.now();
-        const subtitle = await Subtitle.findByIdAndUpdate(id, {
+        const photo = await Photo.findByIdAndUpdate(id, {
             ...req.body, last_modified_date
         });
 
         res.json({
             success: true,
-            data: subtitle,
+            data: photo,
             message: `Successfully updated ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
@@ -209,7 +233,7 @@ const editSubtitle = async (req, res) => {
     }
 }
 
-const deleteSubtitle = async (req, res) => {
+const deletePhoto = async (req, res) => {
     try {
         const {id} = req.params;
 
@@ -225,11 +249,11 @@ const deleteSubtitle = async (req, res) => {
         }
         */
 
-        const subtitle = await Subtitle.findByIdAndDelete(id);
+        const photo = await Photo.findByIdAndDelete(id);
 
         res.json({
             success: true,
-            data: subtitle,
+            data: photo,
             message: `Successfully deleted ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
@@ -244,7 +268,7 @@ const deleteSubtitle = async (req, res) => {
     }
 }
 
-const deleteSubtitleByMovieID = async (req, res) => {
+const deletePhotoByMovieID = async (req, res) => {
     try {
         const {movieID} = req.params;
 
@@ -261,18 +285,18 @@ const deleteSubtitleByMovieID = async (req, res) => {
         */
 
         const movie = await getMovieByID(movieID);
-        const subtitles = await Subtitle.find({
-            videoID: movie._id
+        const photos = await Photo.find({
+            recordID: movie._id
         });
 
-        for (let i = 0; i < subtitles.length; i++) {
-            const subtitleItem = subtitles[i];
-            await Subtitle.findByIdAndDelete(subtitleItem._id);
+        for (let i = 0; i < photos.length; i++) {
+            const phototem = photos[i];
+            await Photo.findByIdAndDelete(phototem._id);
         }
 
         res.json({
             success: true,
-            data: subtitles,
+            data: photos,
             message: `Successfully deleted ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
@@ -287,9 +311,9 @@ const deleteSubtitleByMovieID = async (req, res) => {
     }
 }
 
-const deleteSubtitleByEpisodeID = async (req, res) => {
+const deletePhotoBySeriesID = async (req, res) => {
     try {
-        const {episodeID} = req.params;
+        const {seriesID} = req.params;
 
         /*
         let existedGenre = await Genre.findById(id);
@@ -303,19 +327,62 @@ const deleteSubtitleByEpisodeID = async (req, res) => {
         }
         */
 
-        const episode = await getEpisodeByID(episodeID);
-        const subtitles = await Subtitle.find({
-            videoID: episode._id
+        const series = await getSeriesByID(seriesID);
+        const photos = await Photo.find({
+            recordID: series._id
         });
 
-        for (let i = 0; i < subtitles.length; i++) {
-            const subtitleItem = subtitles[i];
-            await Subtitle.findByIdAndDelete(subtitleItem._id);
+        for (let i = 0; i < photos.length; i++) {
+            const phototem = photos[i];
+            await Photo.findByIdAndDelete(phototem._id);
         }
 
         res.json({
             success: true,
-            data: subtitles,
+            data: photos,
+            message: `Successfully deleted ${A_OR_AN} ${APP_NAME}`,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const deletePhotoBySeasonID = async (req, res) => {
+    try {
+        const {seasonID} = req.params;
+
+        /*
+        let existedGenre = await Genre.findById(id);
+
+        if (!existedGenre) {
+            return res.json({
+                success: false,
+                message: `This ${APP_NAME} does not exist`,
+                status: 400
+            })
+        }
+        */
+
+        const movie = await getSeasonByID(seasonID);
+        const photos = await Photo.find({
+            recordID: movie._id
+        });
+
+        for (let i = 0; i < photos.length; i++) {
+            const phototem = photos[i];
+            await Photo.findByIdAndDelete(phototem._id);
+        }
+
+        res.json({
+            success: true,
+            data: photos,
             message: `Successfully deleted ${A_OR_AN} ${APP_NAME}`,
             status: 200
         })
@@ -331,13 +398,15 @@ const deleteSubtitleByEpisodeID = async (req, res) => {
 }
 
 module.exports = {
-    getAllSubtitles,
-    getSubtitleByID,
-    addSubtitle,
-    editSubtitle,
-    deleteSubtitle,
-    deleteSubtitleByMovieID,
-    deleteSubtitleByEpisodeID,
-    getSubtitlesByMovieID,
-    getSubtitlesByEpisodeID
+    getAllPhotos,
+    getPhotoByID,
+    getPhotosByMovieID,
+    getPhotosBySeriesID,
+    getPhotosBySeasonID,
+    addPhoto,
+    editPhoto,
+    deletePhoto,
+    deletePhotoByMovieID,
+    deletePhotoBySeriesID,
+    deletePhotoBySeasonID,
 }

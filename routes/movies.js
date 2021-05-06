@@ -8,8 +8,14 @@ const {
     deleteMovie,
     reformAllMovies,
     getAllMoviesByGenre,
-    checkURLUsageMovie
+    checkURLUsageMovie,
+    getMovieByIMDB_ID,
+    addMovieValidation,
+    editMovieValidation
 } = require("../controllers/movieControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllMovies);
 
@@ -19,12 +25,18 @@ router.get('/reform', reformAllMovies);
 
 router.get('/:id', getMovieByID);
 
+router.get('/IMDB_ID/:IMDB_ID', getMovieByIMDB_ID);
+
 router.get('/checkURLUsage/:id', checkURLUsageMovie);
 
-router.post('/add', addMovie);
+router.post('/add', authenticateToken, addMovie);
 
-router.put('/edit/:id', editMovie);
+router.post('/validation/add', addMovieValidation);
 
-router.delete('/delete/:id', deleteMovie);
+router.put('/edit/:id', authenticateToken, editMovie);
+
+router.put('/validation/edit/:id', editMovieValidation);
+
+router.delete('/delete/:id', authenticateToken, deleteMovie);
 
 module.exports = router;

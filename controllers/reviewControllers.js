@@ -137,7 +137,7 @@ const getReviewsByMovieID = async (req, res) => {
         const {
             movieID
         } = req.params;
-        const reviews = await Review.find(movieID);
+        const reviews = await Review.find({movieID});
 
         res.json({
             success: true,
@@ -221,7 +221,9 @@ const addReview = async (req, res) => {
         const review = await new Review({
             grading,
             customerID,
-            movieID
+            movieID,
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         const existedMovie = await getMovieByID(movieID);
@@ -292,9 +294,11 @@ const editReview = async (req, res) => {
             await changeRatingOfSeries(movieID)
         }
 
+        const updatedReview = await Review.findById(id);
+
         res.json({
             success: true,
-            data: review,
+            data: updatedReview,
             message: `Successfully updated ${A_OR_AN} ${APP_NAME}`
         })
     } catch (error) {

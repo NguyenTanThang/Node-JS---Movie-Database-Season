@@ -16,10 +16,11 @@ const {
 const {
     removeSubtitleByVideoURL
 } = require("../requests/subtitleRequests");
+var fs = require('fs');
 
 const reformAllMovies = async (req, res) => {
     try {
-        let movies = await Movie.find().sort([['created_date', 'descending']]);
+        let movies = await Movie.find().sort([['created_date', 'ascending']]);
 
         /*
         for (let index = 0; index < movies.length; index++) {
@@ -34,15 +35,38 @@ const reformAllMovies = async (req, res) => {
 
        for (let index = 0; index < movies.length; index++) {
             const movie = movies[index];
-            const {_id, IMDB_ID} = movie;
+            const {_id} = movie;
         
-            const imdbMovie = await getOMDBMovie(IMDB_ID);
             await Movie.findByIdAndUpdate(_id, {
-                imdbMovie
+                rating: 0
             })
         }
 
-        movies = await Movie.find().sort([['created_date', 'descending']]);
+        movies = await Movie.find().sort([['created_date', 'ascending']]);
+        
+        /*
+
+        var obj = {
+            movies: []
+         };
+
+        for (let index = 0; index < movies.length; index++) {
+            const movie = movies[index];
+            obj.movies.push(movie._doc);
+        }
+
+        var json = JSON.stringify(obj);
+        var fileURL = `E:/Test Things Out/Test Movies Website (refined) (act 2)/1. Official/sever/seeders/jsonFiles/movies.json`
+
+        var exists = fs.existsSync(fileURL);
+
+        if (exists) {
+            fs.unlinkSync(fileURL);
+        }
+
+        fs.writeFileSync(fileURL, json, 'utf8');
+
+        */
 
         res.status(200).json({
             success: true,
@@ -63,7 +87,10 @@ const reformAllMovies = async (req, res) => {
 
 const getAllMovies = async (req, res) => {
     try {
-        let movies = await Movie.find().sort([['created_date', 'descending']]);
+        let movies = await Movie
+        //.find({}, [])
+        .find({})
+        .sort([['created_date', 'descending']]);
         
         res.status(200).json({
             success: true,
@@ -228,6 +255,110 @@ const getMovieByID = async (req, res) => {
     }
 }
 
+const getMovieByIMDB_ID = async (req, res) => {
+    try {
+        const {
+            IMDB_ID
+        } = req.params;
+        const movie = await Movie.findOne({IMDB_ID});
+        
+        res.json({
+            success: true,
+            data: movie,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const addMovieValidation = async (req, res) => {
+    try {
+        let {
+            name,
+            IMDB_ID
+        } = req.body;
+
+        const existedMoviesName = await Movie.find({
+            name
+        });
+
+        const existedMoviesIMDB = await Movie.find({
+            IMDB_ID
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedMoviesName,
+                existedMoviesIMDB
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
+const editMovieValidation = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+        let {
+            name,
+            IMDB_ID
+        } = req.body;
+
+        let existedMoviesName = await Movie.find({
+            name
+        });
+
+        let existedMoviesIMDB = await Movie.find({
+            IMDB_ID
+        });
+
+        existedMoviesName = existedMoviesName.filter(existedMoviesNameItem => {
+            return existedMoviesNameItem._id != id;
+        });
+
+        existedMoviesIMDB = existedMoviesIMDB.filter(existedMoviesIMDBItem => {
+            return existedMoviesIMDBItem._id != id;
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                existedMoviesName,
+                existedMoviesIMDB
+            },
+            message: ``,
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 const addMovie = async (req, res) => {
     try {
         let {
@@ -285,7 +416,8 @@ const addMovie = async (req, res) => {
             posterURL,
             IMDB_ID,
             imdbMovie,
-            created_date: Date.now()
+            created_date: Date.now(),
+            last_modified_date: Date.now()
         }).save();
 
         res.json({
@@ -455,5 +587,8 @@ module.exports = {
     deleteMovie,
     reformAllMovies,
     getAllMoviesByGenre,
-    checkURLUsageMovie
+    checkURLUsageMovie,
+    getMovieByIMDB_ID,
+    addMovieValidation,
+    editMovieValidation
 }

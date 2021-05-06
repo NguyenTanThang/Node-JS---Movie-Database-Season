@@ -55,91 +55,6 @@ const getCustomerDashboardData = async (req, res) => {
 
 const getRevenueData = async (req, res) => {
     try {
-        /*
-        monthlyRevenueChartData: {
-        year2020: {
-            Jan: {
-                totalRevenue: 2300
-            },
-            Feb: {
-                totalRevenue: 1900
-            },
-            Mar: {
-                totalRevenue: 2200
-            },
-            Apr: {
-                totalRevenue: 3000
-            },
-            May: {
-                totalRevenue: 2700
-            },
-            Jun: {
-                totalRevenue: 2500
-            },
-            Jul: {
-                totalRevenue: 2200
-            },
-            Aug: {
-                totalRevenue: 1700
-            },
-            Sep: {
-                totalRevenue: 1500
-            },
-            Oct: {
-                totalRevenue: 1800
-            },
-            Nov: {
-                totalRevenue: 2100
-            },
-            Dec: {
-                totalRevenue: 2600
-            },
-        },
-        year2021: {
-            Jan: {
-                totalRevenue: 1900
-            },
-            Feb: {
-                totalRevenue: 2700
-            },
-            Mar: {
-                totalRevenue: 3800
-            },
-            Apr: {
-                totalRevenue: 8200
-            },
-            May: {
-                totalRevenue: 1700
-            },
-            Jun: {
-                totalRevenue: 2200
-            },
-            Jul: {
-                totalRevenue: 2500
-            },
-            Aug: {
-                totalRevenue: 2700
-            },
-            Sep: {
-                totalRevenue: 2100
-            },
-            Oct: {
-                totalRevenue: 2600
-            },
-            Nov: {
-                totalRevenue: 1500
-            },
-            Dec: {
-                totalRevenue: 1800
-            },
-        }
-    },
-    revenueYearList: [
-        "2020",
-        "2021"
-    ],
-        */
-       
         const monthList = [
             "Jan",
             "Feb",
@@ -226,7 +141,94 @@ const getRevenueData = async (req, res) => {
     }
 }
 
+const getNewCustomerData = async (req, res) => {
+    try {
+        const monthList = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ]
+       let monthlyNewUserChartData = {};
+       let newUserYearList = [];
+
+        const customers = await Customer
+        .find()
+        .sort([['created_date', 'ascending']])
+        .exec();
+        const firstCustomer = customers[0];
+        const lastCustomer = customers[customers.length - 1];
+        const firstCustomerYear = getParseDateMomentYear(firstCustomer.created_date);
+        const lastCustomerYear = getParseDateMomentYear(lastCustomer.created_date);
+
+        for (let i = firstCustomerYear; i <= lastCustomerYear; i++) {
+            newUserYearList.push(i + "");             
+        }
+
+        for (let j = 0; j < newUserYearList.length; j++) {
+            const customerYearItem = newUserYearList[j];
+            let yearCustomer = {};
+            let yearLabel = `year${customerYearItem}`;
+            const customersInYear = customers.filter(customer => {
+                if (getParseDateMomentYear(customer.created_date) === customerYearItem) {
+                    return true;
+                }
+                return false;
+            })
+
+            for (let i = 0; i < monthList.length; i++) {
+                const monthItem = monthList[i];
+                let totalCustomer = 0;
+                const customersInMonth = customersInYear.filter(customer => {
+                    if (parseDateMoment(customer.created_date).includes(monthItem)) {
+                        return true;
+                    }
+                    return false;
+                });
+                customersInMonth.forEach(customer => {
+                    totalCustomer += 1;
+                })
+                yearCustomer = {
+                    ...yearCustomer,
+                    [monthItem]: {totalCustomer}
+                }
+            }
+
+            monthlyNewUserChartData = {
+                ...monthlyNewUserChartData,
+                [yearLabel]: yearCustomer
+            }
+        }
+ 
+        res.json({
+            success: true,
+            data: {
+                monthlyNewUserChartData,
+                newUserYearList
+            },
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            data: null,
+            message: `Internal Server Error`,
+            status: 500
+        })
+    }
+}
+
 module.exports = {
     getCustomerDashboardData,
-    getRevenueData
+    getRevenueData,
+    getNewCustomerData
 }

@@ -7,10 +7,18 @@ const {
     addSeason,
     editSeason,
     deleteSeason,
-    getSeasonsBySeriesID
+    getSeasonsBySeriesID,
+    addSeasonValidation,
+    editSeasonValidation,
+    reformAllSeasons
 } = require("../controllers/seasonControllers");
+const {
+    authenticateToken
+} = require("../utils/jwtAuth");
 
 router.get('/', getAllSeasons);
+
+router.get('/reform', reformAllSeasons);
 
 router.get('/seriesID/:seriesID', getSeasonsBySeriesID);
 
@@ -18,10 +26,14 @@ router.get('/:id', getSeasonByID);
 
 router.get('/checkURLUsage/:id', checkURLUsageSeasons);
 
-router.post('/add', addSeason);
+router.post('/validation/add', addSeasonValidation);
 
-router.put('/edit/:id', editSeason);
+router.post('/add', authenticateToken, addSeason);
 
-router.delete('/delete/:id', deleteSeason);
+router.put('/edit/:id', authenticateToken, editSeason);
+
+router.put('/validation/edit/:id', editSeasonValidation);
+
+router.delete('/delete/:id', authenticateToken, deleteSeason);
 
 module.exports = router;

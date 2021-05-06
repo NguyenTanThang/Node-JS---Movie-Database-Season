@@ -1,4 +1,5 @@
 const Customer = require("../models/Customer");
+const Comment = require("../models/Comment");
 const ChangePasswordToken = require("../models/ChangePasswordToken");
 const A_OR_AN = "a";
 const APP_NAME = "customer";
@@ -1223,7 +1224,7 @@ const resetPassword = async (req, res) => {
       expiryDate
     } = resetPasswordToken;
 
-    if (getDaysDiff(expiryDate) <= 0) {
+    if (getDaysDiffVerbose(expiryDate) <= 0) {
       return res.json({
         success: false,
         data: null,
@@ -1410,7 +1411,9 @@ const addCustomer = async (req, res) => {
       email,
       password,
       validated,
-      stripeCustomerID: stripeCustomer.id
+      stripeCustomerID: stripeCustomer.id,
+      created_date: Date.now(),
+      last_modified_date: Date.now()
     }).save();
 
     const returnedCustomerItem = {
@@ -1494,6 +1497,7 @@ const editCustomer = async (req, res) => {
         avatar,
         email,
         validated,
+        avatar,
         password,
         last_modified_date
       });
@@ -1502,6 +1506,7 @@ const editCustomer = async (req, res) => {
         username,
         avatar,
         email,
+        avatar,
         validated,
         last_modified_date
       });
@@ -1552,6 +1557,14 @@ const deleteCustomer = async (req, res) => {
 
     const customer = await Customer.findByIdAndDelete(id);
     const stripeCustomer = await deleteStripeCustomer(customer.stripeCustomerID);
+    const comments = await Comment.find({
+      customerID: customer._id
+    });
+
+    for (let i = 0; i < comments.length; i++) {
+      const comment = comments[i];
+      await Comment.findByIdAndDelete(comment._id);
+    }
 
     const returnedCustomerItem = {
       customerItem: customer,
